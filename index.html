@@ -274,39 +274,31 @@
             transform: scale(1) rotate(0deg);
         }
 
-        /* ===== Security: Lock + GIF reveal ===== */
-        .security-lock-hidden {
-            opacity: 0;
-            transform: scale(0.5) rotate(-20deg);
+        /* ===== Bottom Blur Strip ===== */
+        .bottom-blur {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            mask-image: linear-gradient(to bottom, transparent, black);
+            -webkit-mask-image: linear-gradient(to bottom, transparent, black);
+            pointer-events: none;
+            z-index: 50;
         }
-        .security-lock-visible {
+
+        /* ===== Security: Lock ↔ GIF toggle ===== */
+        #security-visual.showing-gif #security-lock {
+            opacity: 0;
+            transform: scale(0.8);
+            pointer-events: none;
+        }
+        #security-visual.showing-gif #security-gif {
             opacity: 1;
-            transform: scale(1) rotate(0deg);
-        }
-        .security-lock-fade {
-            opacity: 0;
-            transform: scale(0.5) rotate(20deg);
-        }
-        .security-gif-wrap {
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows 0.6s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.6s ease;
-        }
-        .security-gif-wrap.open {
-            grid-template-rows: 1fr;
-            margin-top: 16px;
-        }
-        .security-gif-inner {
-            overflow: hidden;
-        }
-        .security-gif-inner > * {
-            opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s;
-        }
-        .security-gif-wrap.open .security-gif-inner > * {
-            opacity: 1;
-            transform: translateY(0);
+            transform: scale(1);
+            pointer-events: auto;
         }
     </style>
 </head>
@@ -452,12 +444,8 @@
                             </div>
                             <div class="feature-image-wrap">
                                 <div class="feature-image-inner">
-                                    <div class="w-44 h-44 shrink-0 bg-canvas rounded-2xl border border-border/50 flex items-center justify-center relative overflow-hidden">
-                                        <div class="absolute inset-0 bg-[radial-gradient(#00000008_1px,transparent_1px)] [background-size:12px_12px]"></div>
-                                        <div class="relative flex flex-col items-center gap-2 text-border">
-                                            <iconify-icon icon="solar:database-linear" width="32" stroke-width="1"></iconify-icon>
-                                            <span class="text-[10px] font-mono uppercase tracking-wider">Database Dashboard</span>
-                                        </div>
+                                    <div class="rounded-2xl border border-border/50 overflow-hidden w-44 h-44 shrink-0">
+                                        <img src="Private Database Black and White Site Purple background.png" alt="Private Database" class="w-full h-full object-cover block">
                                     </div>
                                 </div>
                             </div>
@@ -480,12 +468,8 @@
                             </div>
                             <div class="feature-image-wrap">
                                 <div class="feature-image-inner">
-                                    <div class="w-44 h-44 shrink-0 bg-canvas rounded-2xl border border-border/50 flex items-center justify-center relative overflow-hidden">
-                                        <div class="absolute inset-0 bg-[radial-gradient(#00000008_1px,transparent_1px)] [background-size:12px_12px]"></div>
-                                        <div class="relative flex flex-col items-center gap-2 text-border">
-                                            <iconify-icon icon="solar:server-square-linear" width="32" stroke-width="1"></iconify-icon>
-                                            <span class="text-[10px] font-mono uppercase tracking-wider">Hosting Panel</span>
-                                        </div>
+                                    <div class="rounded-2xl border border-border/50 overflow-hidden w-44 h-44 shrink-0">
+                                        <img src="Hosting image black and white shot Purple background.png" alt="Managed Hosting" class="w-full h-full object-cover block" style="object-position: left center;">
                                     </div>
                                 </div>
                             </div>
@@ -513,9 +497,9 @@
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[minmax(200px,auto)]">
 
                     <!-- Big Card: Experiment Safely (Staging/Prod) -->
-                    <div class="reveal md:col-span-8 md:row-span-2 group relative bg-white border border-border rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-500 p-8 flex flex-col">
+                    <div class="reveal md:col-span-8 group relative bg-white border border-border rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-500 p-6 flex flex-col">
                         <div class="relative z-10 flex flex-col h-full">
-                            <div class="flex items-start justify-between mb-8">
+                            <div class="flex items-start justify-between mb-4">
                                 <div>
                                     <div class="w-10 h-10 bg-canvas border border-border rounded-lg flex items-center justify-center mb-4 text-obsidian">
                                         <iconify-icon icon="solar:branching-paths-down-linear" width="20" stroke-width="1.5"></iconify-icon>
@@ -533,7 +517,7 @@
                             </div>
 
                             <!-- Staging/Prod UI Visualization (Interactive) -->
-                            <div id="deploy-viz" class="flex-1 w-full bg-canvas border border-border rounded-xl relative overflow-hidden flex items-center justify-center py-6">
+                            <div id="deploy-viz" class="w-full bg-canvas border border-border rounded-xl relative overflow-hidden flex items-center justify-center py-4">
                                 <div class="absolute inset-0 bg-[radial-gradient(#00000008_1px,transparent_1px)] [background-size:12px_12px]"></div>
 
                                 <div class="relative flex items-center gap-6 md:gap-8">
@@ -620,51 +604,47 @@
                             See, organize, and control the people using your apps.
                         </p>
                         <!-- Visual: cycling user cards on hover -->
-                        <div id="user-card-list" class="space-y-2 overflow-hidden"></div>
-                    </div>
-
-                    <!-- Bottom Wide: Security -->
-                    <div id="security-card" class="reveal reveal-delay-3 md:col-span-6 group relative bg-white border border-border rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 p-8">
-                        <div class="flex flex-row items-center gap-6">
-                            <div class="flex-1">
-                                <div class="w-10 h-10 bg-canvas border border-border rounded-lg flex items-center justify-center mb-4 text-obsidian">
-                                    <iconify-icon icon="solar:shield-keyhole-linear" width="20" stroke-width="1.5"></iconify-icon>
-                                </div>
-                                <h3 class="text-lg font-semibold text-obsidian mb-2">Security Handled</h3>
-                                <p class="text-sm text-subtle">
-                                    Private servers, safe defaults, and isolation built in. Your app and data are protected from day one.
-                                </p>
-                            </div>
-                            <div id="security-lock" class="w-24 h-24 shrink-0 flex items-center justify-center cursor-pointer hover:scale-110 active:scale-95 transition-transform">
-                                <iconify-icon id="lock-unlocked" icon="solar:lock-password-unlocked-linear" width="48" class="text-border transition-all duration-400"></iconify-icon>
-                                <iconify-icon id="lock-locked" icon="solar:lock-password-bold" width="48" class="text-emerald-500 absolute transition-all duration-400 security-lock-hidden"></iconify-icon>
-                            </div>
-                        </div>
-                        <!-- Gandalf GIF — hidden until lock is clicked -->
-                        <div id="security-gif-wrap" class="security-gif-wrap mt-0">
-                            <div class="security-gif-inner">
-                                <img src="gandalf-you-shall-not-past.gif" class="w-full rounded-xl border border-border shadow-sm" alt="You shall not pass">
-                            </div>
+                        <div class="w-[70%] mx-auto bg-canvas rounded-lg border border-border/50 p-3">
+                            <div id="user-card-list" class="space-y-2 overflow-hidden"></div>
                         </div>
                     </div>
 
-                    <!-- Bottom Wide: Storage -->
-                    <div class="reveal reveal-delay-4 md:col-span-6 group relative bg-white border border-border rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 p-8 flex flex-row items-center gap-6">
-                        <div class="flex-1">
-                            <div class="w-10 h-10 bg-canvas border border-border rounded-lg flex items-center justify-center mb-4 text-obsidian">
-                                <iconify-icon icon="solar:cloud-upload-linear" width="20" stroke-width="1.5"></iconify-icon>
-                            </div>
-                            <h3 class="text-lg font-semibold text-obsidian mb-2">File Storage</h3>
-                            <p class="text-sm text-subtle">
-                                Give your apps the file storage they require so your users can upload files, pictures, and videos.
-                            </p>
+                    <!-- Side Card 3: Security -->
+                    <div id="security-card" class="reveal reveal-delay-3 md:col-span-4 group relative bg-white border border-border rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 p-8">
+                        <div class="w-10 h-10 bg-canvas border border-border rounded-lg flex items-center justify-center mb-4 text-obsidian">
+                            <iconify-icon icon="solar:shield-keyhole-linear" width="20" stroke-width="1.5"></iconify-icon>
                         </div>
-                        <div id="storage-photos" class="w-28 h-28 shrink-0 relative">
-                            <img src="Black and White Website photos/The_Great_Wave_off_Kanagawa.jpg" class="storage-photo active absolute inset-0 w-full h-full object-cover rounded-lg border border-border shadow-sm" alt="Great Wave">
-                            <img src="Black and White Website photos/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg" class="storage-photo absolute inset-0 w-full h-full object-cover rounded-lg border border-border shadow-sm" alt="Starry Night">
-                            <img src="Black and White Website photos/Adams_The_Tetons_and_the_Snake_River.jpg" class="storage-photo absolute inset-0 w-full h-full object-cover rounded-lg border border-border shadow-sm" alt="Tetons">
-                            <img src="Black and White Website photos/Screenshot_2026-02-07_at_12.00.31_AM.png" class="storage-photo absolute inset-0 w-full h-full object-cover rounded-lg border border-border shadow-sm" alt="Screenshot 1">
-                            <img src="Black and White Website photos/Screenshot_2026-02-07_at_12.04.46_AM.png" class="storage-photo absolute inset-0 w-full h-full object-cover rounded-lg border border-border shadow-sm" alt="Screenshot 2">
+                        <h3 class="text-lg font-semibold text-obsidian mb-2">Security Handled</h3>
+                        <p class="text-sm text-subtle mb-6">
+                            Private servers, safe defaults, and isolation built in. Your app and data are protected from day one.
+                        </p>
+                        <div id="security-visual" class="w-[70%] mx-auto aspect-square bg-canvas rounded-lg border border-border/50 relative overflow-hidden cursor-pointer">
+                            <!-- Lock icon (visible by default) -->
+                            <div id="security-lock" class="absolute inset-0 flex items-center justify-center transition-all duration-500">
+                                <iconify-icon icon="solar:lock-password-unlocked-linear" width="72" class="text-border"></iconify-icon>
+                            </div>
+                            <!-- GIF (hidden by default) -->
+                            <div id="security-gif" class="absolute inset-0 opacity-0 scale-95 transition-all duration-500 pointer-events-none">
+                                <img src="gandalf-you-shall-not-past.gif" class="w-full h-full object-cover rounded-lg" alt="You shall not pass">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Side Card 4: Storage -->
+                    <div class="reveal reveal-delay-4 md:col-span-4 group relative bg-white border border-border rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 p-8">
+                        <div class="w-10 h-10 bg-canvas border border-border rounded-lg flex items-center justify-center mb-4 text-obsidian">
+                            <iconify-icon icon="solar:cloud-upload-linear" width="20" stroke-width="1.5"></iconify-icon>
+                        </div>
+                        <h3 class="text-lg font-semibold text-obsidian mb-2">File Storage</h3>
+                        <p class="text-sm text-subtle mb-6">
+                            Give your apps the file storage they require so your users can upload files, pictures, and videos.
+                        </p>
+                        <div id="storage-photos" class="w-[70%] mx-auto aspect-square relative bg-canvas rounded-lg border border-border/50">
+                            <img src="Black and White Website photos/The_Great_Wave_off_Kanagawa.jpg" class="storage-photo active absolute inset-0 w-full h-full object-contain rounded-lg border border-border shadow-sm" alt="Great Wave">
+                            <img src="Black and White Website photos/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg" class="storage-photo absolute inset-0 w-full h-full object-contain rounded-lg border border-border shadow-sm" alt="Starry Night">
+                            <img src="Black and White Website photos/Adams_The_Tetons_and_the_Snake_River.jpg" class="storage-photo absolute inset-0 w-full h-full object-contain rounded-lg border border-border shadow-sm" alt="Tetons">
+                            <img src="Black and White Website photos/Screenshot_2026-02-07_at_12.00.31_AM.png" class="storage-photo absolute inset-0 w-full h-full object-contain rounded-lg border border-border shadow-sm" alt="Screenshot 1">
+                            <img src="Black and White Website photos/Screenshot_2026-02-07_at_12.04.46_AM.png" class="storage-photo absolute inset-0 w-full h-full object-contain rounded-lg border border-border shadow-sm" alt="Screenshot 2">
                         </div>
                     </div>
 
@@ -1306,6 +1286,8 @@
                     { name: 'w-10', avatar: 'from-amber-200 to-amber-300', status: 'Pending', statusBg: 'bg-amber-50', statusText: 'text-amber-600', bg: 'bg-canvas/50', avatarOpacity: 'opacity-50' },
                     { name: 'w-18', avatar: 'from-rose-200 to-rose-300', status: 'Active', statusBg: 'bg-green-50', statusText: 'text-green-600', bg: 'bg-white', avatarOpacity: '' },
                     { name: 'w-11', avatar: 'from-teal-200 to-teal-300', status: 'Invited', statusBg: 'bg-gray-50', statusText: 'text-gray-400', bg: 'bg-canvas/50', avatarOpacity: 'opacity-50' },
+                    { name: 'w-15', avatar: 'from-indigo-200 to-indigo-300', status: 'Active', statusBg: 'bg-green-50', statusText: 'text-green-600', bg: 'bg-white', avatarOpacity: '' },
+                    { name: 'w-13', avatar: 'from-orange-200 to-orange-300', status: 'Pending', statusBg: 'bg-amber-50', statusText: 'text-amber-600', bg: 'bg-canvas/50', avatarOpacity: 'opacity-50' },
                 ];
 
                 let currentIndex = 0;
@@ -1322,10 +1304,10 @@
                     return div;
                 }
 
-                // Render initial 3 cards
+                // Render initial 5 cards
                 function renderInitial() {
                     userCardList.innerHTML = '';
-                    for (let i = 0; i < 3; i++) {
+                    for (let i = 0; i < 5; i++) {
                         userCardList.appendChild(createCard(users[(currentIndex + i) % users.length]));
                     }
                 }
@@ -1344,7 +1326,7 @@
 
                         // Add new card at bottom with fade-in
                         currentIndex = (currentIndex + 1) % users.length;
-                        const newUser = users[(currentIndex + 2) % users.length];
+                        const newUser = users[(currentIndex + 4) % users.length];
                         const newCard = createCard(newUser);
                         newCard.classList.add('fade-in');
                         userCardList.appendChild(newCard);
@@ -1393,41 +1375,17 @@
                 });
             }
 
-            // Security: Lock click → close lock → reveal GIF
-            const securityLock = document.getElementById('security-lock');
-            const lockUnlocked = document.getElementById('lock-unlocked');
-            const lockLocked = document.getElementById('lock-locked');
-            const securityGifWrap = document.getElementById('security-gif-wrap');
-
-            if (securityLock && lockUnlocked && lockLocked && securityGifWrap) {
-                let locked = false;
-
-                securityLock.addEventListener('click', () => {
-                    if (locked) {
-                        // Unlock: hide locked icon, show unlocked, close GIF
-                        lockLocked.classList.remove('security-lock-visible');
-                        lockLocked.classList.add('security-lock-hidden');
-                        setTimeout(() => {
-                            lockUnlocked.classList.remove('security-lock-fade');
-                        }, 200);
-                        securityGifWrap.classList.remove('open');
-                        locked = false;
-                    } else {
-                        // Lock: hide unlocked icon, show locked, open GIF
-                        lockUnlocked.classList.add('security-lock-fade');
-                        setTimeout(() => {
-                            lockLocked.classList.remove('security-lock-hidden');
-                            lockLocked.classList.add('security-lock-visible');
-                        }, 200);
-                        setTimeout(() => {
-                            securityGifWrap.classList.add('open');
-                        }, 400);
-                        locked = true;
-                    }
+            // Security: Lock ↔ GIF toggle
+            const securityVisual = document.getElementById('security-visual');
+            if (securityVisual) {
+                securityVisual.addEventListener('click', () => {
+                    securityVisual.classList.toggle('showing-gif');
                 });
             }
         });
     </script>
+
+    <div class="bottom-blur"></div>
 
 </body>
 </html>

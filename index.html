@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PopDB | Backend for Vibe Coders</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        canvas: '#FAFAFA',
+                        surface: '#FFFFFF',
+                        obsidian: '#171717',
+                        subtle: '#737373',
+                        border: '#E5E5E5',
+                        accent: '#3B82F6',
+                    },
+                    letterSpacing: {
+                        tight: '-0.02em',
+                        tighter: '-0.04em',
+                    },
+                    boxShadow: {
+                        'soft': '0 2px 10px rgba(0, 0, 0, 0.03)',
+                        'glow': '0 0 20px rgba(59, 130, 246, 0.15)'
+                    },
+                    animation: {
+                        'marquee': 'marquee-scroll 30s linear infinite',
+                        'marquee-reverse': 'marquee-scroll-reverse 30s linear infinite',
+                    },
+                    keyframes: {
+                        'marquee-scroll': {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        },
+                        'marquee-scroll-reverse': {
+                            '0%': { transform: 'translateX(-50%)' },
+                            '100%': { transform: 'translateX(0)' },
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FAFAFA;
+            color: #171717;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E5E5E5;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D4D4D4;
+        }
+
+        /* Grid Background */
+        .technical-grid {
+            background-size: 40px 40px;
+            background-image:
+                linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+        }
+
+        /* Utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(229, 229, 229, 0.6);
+        }
+
+        .shimmer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
+            transform: skewX(-20deg) translateX(-150%);
+            transition: transform 0.5s;
+        }
+        .group:hover .shimmer {
+            transform: skewX(-20deg) translateX(150%);
+            transition: transform 1s ease-in-out;
+        }
+
+        /* Scroll Reveal Animations */
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+        }
+
+        .reveal.visible {
+            animation: fade-in-up 0.6s ease-out forwards;
+        }
+
+        .reveal-delay-1 { animation-delay: 0.1s; }
+        .reveal-delay-2 { animation-delay: 0.2s; }
+        .reveal-delay-3 { animation-delay: 0.3s; }
+        .reveal-delay-4 { animation-delay: 0.4s; }
+        .reveal-delay-5 { animation-delay: 0.5s; }
+        .reveal-delay-6 { animation-delay: 0.6s; }
+
+        /* ===== Experiment Safely: Interactive Deploy ===== */
+
+        /* Arrow — dim by default, lights up on .deploy-active */
+        .deploy-arrow-icon {
+            opacity: 0.3;
+            color: #E5E5E5;
+            transition: opacity 0.4s ease, color 0.4s ease;
+        }
+        .deploy-active .deploy-arrow-icon {
+            opacity: 1;
+            color: #171717;
+        }
+
+        /* LIVE box — green glow on .deploy-success */
+        .deploy-live-box {
+            border-color: #E5E5E5;
+            box-shadow: 0 0 0 rgba(16, 185, 129, 0);
+            transition: border-color 0.5s ease, box-shadow 0.5s ease;
+        }
+        .deploy-success .deploy-live-box {
+            border-color: #10B981;
+            box-shadow: 0 0 24px rgba(16, 185, 129, 0.25);
+        }
+
+        /* Checkmark — scales in on .deploy-success */
+        .deploy-check {
+            opacity: 0;
+            transform: scale(0);
+            transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .deploy-success .deploy-check {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* "Deployed!" label — fades in on .deploy-success */
+        .deploy-label {
+            opacity: 0;
+            transform: translateY(4px);
+            transition: opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s;
+        }
+        .deploy-success .deploy-label {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Deploy button pulse hint */
+        @keyframes btn-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(23, 23, 23, 0.3); }
+            50%      { box-shadow: 0 0 0 6px rgba(23, 23, 23, 0); }
+        }
+        .deploy-btn-pulse {
+            animation: btn-pulse 2s ease infinite;
+        }
+
+        /* ===== Top 3 Features: Expanding Accordion ===== */
+        .feature-card {
+            border: 1px solid #E5E5E5;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 20px;
+            padding: 28px 32px;
+            cursor: pointer;
+            transition: background 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .feature-card.active {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(23, 23, 23, 0.15);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+        .feature-card .feature-image-wrap {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .feature-card.active .feature-image-wrap {
+            grid-template-rows: 1fr;
+        }
+        .feature-card .feature-image-inner {
+            overflow: hidden;
+        }
+        .feature-card .feature-image-inner > * {
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s;
+        }
+        .feature-card.active .feature-image-inner > * {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .feature-card .feature-number {
+            color: #AEAEAE;
+            transition: color 0.4s ease;
+        }
+        .feature-card.active .feature-number {
+            color: #171717;
+        }
+
+        /* ===== User Management: Card cycling ===== */
+        .user-card {
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .user-card.fade-out {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        .user-card.fade-in {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+
+        /* ===== File Storage: Photo cycling ===== */
+        .storage-photo {
+            opacity: 0;
+            transform: scale(0.95) rotate(2deg);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .storage-photo.active {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+
+        /* ===== Security: Lock + GIF reveal ===== */
+        .security-lock-hidden {
+            opacity: 0;
+            transform: scale(0.5) rotate(-20deg);
+        }
+        .security-lock-visible {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+        .security-lock-fade {
+            opacity: 0;
+            transform: scale(0.5) rotate(20deg);
+        }
+        .security-gif-wrap {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.6s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.6s ease;
+        }
+        .security-gif-wrap.open {
+            grid-template-rows: 1fr;
+            margin-top: 16px;
+        }
+        .security-gif-inner {
+            overflow: hidden;
+        }
+        .security-gif-inner > * {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s;
+        }
+        .security-gif-wrap.open .security-gif-inner > * {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body class="relative w-full overflow-x-hidden selection:bg-obsidian selection:text-white">
+
+    <!-- Background Grid -->
+    <div class="fixed inset-0 z-0 technical-grid pointer-events-none"></div>
+
+    <!-- Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 w-full px-6 py-4 md:px-12 flex justify-between items-center glass-panel transition-all duration-300">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-obsidian text-white flex items-center justify-center rounded-lg shadow-soft">
+                <iconify-icon icon="solar:bolt-linear" width="18" stroke-width="1.5"></iconify-icon>
+            </div>
+            <span class="font-sans text-sm font-semibold tracking-tight text-obsidian">
+                PopDB
+            </span>
+        </div>
+
+        <nav class="hidden md:flex items-center gap-8">
+            <a href="#" class="font-sans text-xs font-medium text-subtle hover:text-obsidian transition-colors">Manifesto</a>
+            <a href="#" class="font-sans text-xs font-medium text-subtle hover:text-obsidian transition-colors">Pricing</a>
+            <a href="#" class="font-sans text-xs font-medium text-subtle hover:text-obsidian transition-colors">Docs</a>
+        </nav>
+
+        <div class="flex items-center gap-4">
+            <a href="#" class="hidden md:block font-sans text-xs font-medium text-subtle hover:text-obsidian transition-colors">Sign in</a>
+            <button class="group relative overflow-hidden bg-obsidian text-white text-xs font-medium px-5 py-2 rounded-lg shadow-soft hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
+                <div class="shimmer"></div>
+                <span class="relative z-10">Start Building</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="relative z-10 flex flex-col w-full">
+
+        <!-- Hero Section -->
+        <section class="relative min-h-[90vh] flex flex-col items-center justify-center pt-32 pb-20 px-6 md:px-12">
+            <div class="max-w-3xl text-center space-y-8 relative z-10">
+
+                <!-- Badge -->
+                <div class="reveal inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-border shadow-sm mx-auto">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="font-sans text-[10px] font-medium text-subtle tracking-tight uppercase">
+                        Zero Config Required
+                    </span>
+                </div>
+
+                <!-- Headline -->
+                <h1 class="reveal reveal-delay-1 font-sans text-5xl md:text-7xl font-semibold tracking-tighter text-obsidian leading-[1.05]">
+                    One price.<br>
+                    <span class="text-subtle">Unlimited apps and agents.</span>
+                </h1>
+
+                <!-- Subtext -->
+                <p class="reveal reveal-delay-2 max-w-xl mx-auto font-sans text-base md:text-lg text-subtle leading-relaxed">
+                    Build and deploy as many apps and agents as you want all with database, hosting, auth, storage, and an easy to use terminal wrapper, all for a predictable monthly price.
+                </p>
+
+                <!-- CTA -->
+                <div class="reveal reveal-delay-3 flex flex-col md:flex-row items-center justify-center gap-4 pt-4">
+                    <button class="group relative bg-obsidian text-white px-8 py-3 rounded-xl shadow-lg shadow-obsidian/10 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 w-full md:w-auto">
+                        <div class="flex items-center justify-center gap-2">
+                            <span class="text-sm font-medium">Create your first App</span>
+                            <iconify-icon icon="solar:arrow-right-linear" width="16" stroke-width="1.5" class="group-hover:translate-x-1 transition-transform"></iconify-icon>
+                        </div>
+                    </button>
+                    <button class="px-8 py-3 bg-white text-obsidian border border-border rounded-xl shadow-sm hover:border-obsidian/30 hover:bg-gray-50 transition-all duration-300 w-full md:w-auto">
+                        <span class="text-sm font-medium">View Examples</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Hero Visual: The "App Container" Mental Model -->
+            <div class="reveal reveal-delay-4 mt-20 w-full max-w-4xl mx-auto perspective-1000">
+                <div class="relative bg-white border border-border rounded-2xl shadow-2xl shadow-gray-200/50 p-2 md:p-4 overflow-hidden transform rotate-x-12 hover:rotate-x-0 transition-transform duration-700 ease-out">
+                    <!-- Browser Chrome -->
+                    <div class="flex items-center gap-2 px-4 py-3 border-b border-border/50 bg-gray-50/50 rounded-t-xl">
+                        <div class="flex gap-1.5">
+                            <div class="w-2.5 h-2.5 rounded-full bg-red-400/80"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-yellow-400/80"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-green-400/80"></div>
+                        </div>
+                        <div class="flex-1 text-center">
+                            <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-border/60 rounded-md shadow-sm">
+                                <iconify-icon icon="solar:lock-keyhole-minimalistic-linear" width="10" class="text-subtle"></iconify-icon>
+                                <span class="text-[10px] font-mono text-subtle">my-awesome-idea.popdb.app</span>
+                            </div>
+                        </div>
+                        <div class="w-10"></div>
+                    </div>
+
+                    <!-- App Canvas -->
+                    <div class="p-8 md:p-12 flex flex-col items-center justify-center min-h-[300px] relative bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]">
+
+                        <!-- Central Node -->
+                        <div class="relative z-10 flex flex-col items-center gap-6">
+                            <!-- Connection Lines -->
+                            <div class="absolute inset-0 flex items-center justify-center -z-10">
+                                <div class="w-[300px] h-[1px] bg-gradient-to-r from-transparent via-border to-transparent"></div>
+                                <div class="absolute w-[1px] h-[200px] bg-gradient-to-b from-transparent via-border to-transparent"></div>
+                            </div>
+
+                            <!-- Main App Block -->
+                            <div class="w-48 h-32 bg-white rounded-xl border border-obsidian/10 shadow-xl flex flex-col items-center justify-center gap-3 relative group hover:scale-105 transition-transform duration-300">
+                                <div class="absolute -top-3 px-3 py-1 bg-obsidian text-white text-[10px] font-medium rounded-full shadow-lg">Production</div>
+                                <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 border border-border flex items-center justify-center text-obsidian">
+                                    <iconify-icon icon="solar:smartphone-linear" width="24" stroke-width="1.5"></iconify-icon>
+                                </div>
+                                <span class="text-xs font-semibold text-obsidian">My Travel Planner</span>
+                            </div>
+
+                            <!-- Satellites -->
+                            <div class="grid grid-cols-3 gap-16 w-full max-w-lg">
+                                <div class="flex flex-col items-center gap-2 group cursor-default">
+                                    <div class="w-10 h-10 rounded-lg bg-white border border-border shadow-sm flex items-center justify-center text-subtle group-hover:text-obsidian group-hover:border-obsidian/30 transition-all">
+                                        <iconify-icon icon="solar:database-linear" width="20" stroke-width="1.5"></iconify-icon>
+                                    </div>
+                                    <span class="text-[10px] font-mono text-subtle uppercase tracking-wider">Database</span>
+                                </div>
+                                <div class="flex flex-col items-center gap-2 group cursor-default">
+                                    <div class="w-10 h-10 rounded-lg bg-white border border-border shadow-sm flex items-center justify-center text-subtle group-hover:text-obsidian group-hover:border-obsidian/30 transition-all">
+                                        <iconify-icon icon="solar:shield-check-linear" width="20" stroke-width="1.5"></iconify-icon>
+                                    </div>
+                                    <span class="text-[10px] font-mono text-subtle uppercase tracking-wider">Auth</span>
+                                </div>
+                                <div class="flex flex-col items-center gap-2 group cursor-default">
+                                    <div class="w-10 h-10 rounded-lg bg-white border border-border shadow-sm flex items-center justify-center text-subtle group-hover:text-obsidian group-hover:border-obsidian/30 transition-all">
+                                        <iconify-icon icon="solar:folder-with-files-linear" width="20" stroke-width="1.5"></iconify-icon>
+                                    </div>
+                                    <span class="text-[10px] font-mono text-subtle uppercase tracking-wider">Storage</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Top 3 Features (Expanding Accordion) -->
+        <section class="py-20 px-6 md:px-12 border-y border-border/50 bg-canvas/50">
+            <div class="max-w-7xl mx-auto">
+                <div id="feature-accordion" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    <!-- Card 1: App Builder -->
+                    <div class="reveal feature-card active" data-feature="0">
+                        <div class="flex items-start gap-4">
+                            <span class="feature-number font-mono text-sm font-medium mt-0.5">01</span>
+                            <div class="flex-1">
+                                <h3 class="font-sans text-lg font-semibold text-obsidian mb-1">Start Building Now</h3>
+                                <p class="font-sans text-sm text-subtle leading-relaxed">
+                                    PopDB comes with a simple but powerful app builder that helps you start building apps even with no prior experience.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="feature-image-wrap mt-4">
+                            <div class="feature-image-inner">
+                                <div class="h-48 bg-canvas rounded-2xl border border-border/50 flex items-center justify-center relative overflow-hidden">
+                                    <div class="absolute inset-0 bg-[radial-gradient(#00000008_1px,transparent_1px)] [background-size:12px_12px]"></div>
+                                    <div class="relative flex flex-col items-center gap-2 text-border">
+                                        <iconify-icon icon="solar:magic-stick-3-linear" width="32" stroke-width="1"></iconify-icon>
+                                        <span class="text-[10px] font-mono uppercase tracking-wider">App Builder Preview</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Database -->
+                    <div class="reveal reveal-delay-1 feature-card" data-feature="1">
+                        <div class="flex items-start gap-4">
+                            <span class="feature-number font-mono text-sm font-medium mt-0.5">02</span>
+                            <div class="flex-1">
+                                <h3 class="font-sans text-lg font-semibold text-obsidian mb-1">Private Database</h3>
+                                <p class="font-sans text-sm text-subtle leading-relaxed">
+                                    Every app connected to PopDB gets a dedicated database, private and fully under your control. No config strings.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="feature-image-wrap mt-4">
+                            <div class="feature-image-inner">
+                                <div class="h-48 bg-canvas rounded-2xl border border-border/50 flex items-center justify-center relative overflow-hidden">
+                                    <div class="absolute inset-0 bg-[radial-gradient(#00000008_1px,transparent_1px)] [background-size:12px_12px]"></div>
+                                    <div class="relative flex flex-col items-center gap-2 text-border">
+                                        <iconify-icon icon="solar:database-linear" width="32" stroke-width="1"></iconify-icon>
+                                        <span class="text-[10px] font-mono uppercase tracking-wider">Database Dashboard</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Managed Hosting -->
+                    <div class="reveal reveal-delay-2 feature-card md:col-span-2" data-feature="2">
+                        <div class="flex items-start gap-4">
+                            <span class="feature-number font-mono text-sm font-medium mt-0.5">03</span>
+                            <div class="flex-1">
+                                <h3 class="font-sans text-lg font-semibold text-obsidian mb-1">Managed Hosting</h3>
+                                <p class="font-sans text-sm text-subtle leading-relaxed">
+                                    PopDB handles hosting so your app is easy to deploy, reliable, and secure without maintenance or SSH keys.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="feature-image-wrap mt-4">
+                            <div class="feature-image-inner">
+                                <div class="h-48 bg-canvas rounded-2xl border border-border/50 flex items-center justify-center relative overflow-hidden">
+                                    <div class="absolute inset-0 bg-[radial-gradient(#00000008_1px,transparent_1px)] [background-size:12px_12px]"></div>
+                                    <div class="relative flex flex-col items-center gap-2 text-border">
+                                        <iconify-icon icon="solar:server-square-linear" width="32" stroke-width="1"></iconify-icon>
+                                        <span class="text-[10px] font-mono uppercase tracking-wider">Hosting Panel</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Section: System Admin -->
+        <section class="py-32 px-6 md:px-12 bg-canvas relative">
+            <div class="max-w-7xl mx-auto">
+
+                <div class="mb-16 max-w-2xl">
+                    <h2 class="reveal font-sans text-3xl md:text-4xl font-semibold text-obsidian tracking-tight mb-4">
+                        PopDB acts like your System Admin.
+                    </h2>
+                    <p class="reveal reveal-delay-1 text-subtle text-lg">
+                        World class features out of the box, so you can focus on the vibe, not the infrastructure.
+                    </p>
+                </div>
+
+                <!-- Bento Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[minmax(200px,auto)]">
+
+                    <!-- Big Card: Experiment Safely (Staging/Prod) -->
+                    <div class="reveal md:col-span-8 md:row-span-2 group relative bg-white border border-border rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-500 p-8 flex flex-col">
+                        <div class="relative z-10 flex flex-col h-full">
+                            <div class="flex items-start justify-between mb-8">
+                                <div>
+                                    <div class="w-10 h-10 bg-canvas border border-border rounded-lg flex items-center justify-center mb-4 text-obsidian">
+                                        <iconify-icon icon="solar:branching-paths-down-linear" width="20" stroke-width="1.5"></iconify-icon>
+                                    </div>
+                                    <h3 class="text-xl font-semibold text-obsidian mb-2">Experiment Safely</h3>
+                                    <p class="text-sm text-subtle max-w-sm">
+                                        Built-in staging and production environments. Test changes before they reach real users.
+                                    </p>
+                                </div>
+                                <!-- Environment Toggle Visual -->
+                                <div class="hidden md:flex bg-canvas border border-border rounded-full p-1 gap-1">
+                                    <div id="toggle-staging" class="px-3 py-1 rounded-full bg-white shadow-sm border border-border/50 text-xs font-medium text-obsidian transition-all duration-500">Staging</div>
+                                    <div id="toggle-production" class="px-3 py-1 rounded-full text-xs font-medium text-subtle transition-all duration-500">Production</div>
+                                </div>
+                            </div>
+
+                            <!-- Staging/Prod UI Visualization (Interactive) -->
+                            <div id="deploy-viz" class="flex-1 w-full bg-canvas border border-border rounded-xl relative overflow-hidden flex items-center justify-center py-6">
+                                <div class="absolute inset-0 bg-[radial-gradient(#00000008_1px,transparent_1px)] [background-size:12px_12px]"></div>
+
+                                <div class="relative flex items-center gap-6 md:gap-8">
+
+                                    <!-- DEV Node with code + deploy button -->
+                                    <div class="flex flex-col items-center gap-3">
+                                        <div class="w-40 md:w-48 bg-white border-2 border-dashed border-orange-300 rounded-lg shadow-sm p-4 md:p-5 relative">
+                                            <!-- Label -->
+                                            <p class="text-xs md:text-sm font-sans text-obsidian/70 text-center mb-4">Ready to Deploy?</p>
+                                            <!-- Deploy Button -->
+                                            <button id="deploy-btn" class="deploy-btn-pulse w-full py-2 bg-obsidian text-white text-xs font-mono font-medium rounded-lg hover:bg-obsidian/90 active:scale-95 transition-all cursor-pointer flex items-center justify-center gap-1.5">
+                                                <iconify-icon icon="solar:rocket-2-linear" width="14" style="color: white;"></iconify-icon>
+                                                Deploy
+                                            </button>
+                                        </div>
+                                        <div class="flex gap-2 items-center">
+                                            <div class="w-2 h-2 rounded-full bg-orange-400 animate-pulse"></div>
+                                            <span class="text-[10px] font-mono text-subtle uppercase">Staging</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Arrow -->
+                                    <div class="deploy-arrow-icon flex items-center -mt-6">
+                                        <iconify-icon icon="solar:arrow-right-linear" width="28" stroke-width="1.5"></iconify-icon>
+                                    </div>
+
+                                    <!-- LIVE Node with success states -->
+                                    <div class="flex flex-col items-center gap-3">
+                                        <div id="deploy-live" class="deploy-live-box w-40 md:w-48 h-[100px] bg-white border rounded-lg flex flex-col items-center justify-center gap-1 relative">
+                                            <span class="text-sm font-mono text-emerald-600">LIVE</span>
+                                            <!-- Checkmark overlay -->
+                                            <div class="deploy-check absolute -top-2 -right-2 w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center shadow-md">
+                                                <iconify-icon icon="solar:check-circle-bold" width="14" style="color: white;"></iconify-icon>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col items-center gap-1">
+                                            <div class="flex gap-2 items-center">
+                                                <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                                                <span class="text-[10px] font-mono text-subtle uppercase">Production</span>
+                                            </div>
+                                            <span class="deploy-label text-[9px] font-mono text-emerald-600 font-medium">Deployed!</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Side Card 1: Backups -->
+                    <div class="reveal reveal-delay-1 md:col-span-4 group relative bg-white border border-border rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 p-8">
+                        <div class="w-10 h-10 bg-canvas border border-border rounded-lg flex items-center justify-center mb-4 text-obsidian">
+                            <iconify-icon icon="solar:history-linear" width="20" stroke-width="1.5"></iconify-icon>
+                        </div>
+                        <h3 class="text-lg font-semibold text-obsidian mb-2">Backups</h3>
+                        <p class="text-sm text-subtle mb-6">
+                            Recover instantly. Built-in backups and instant rollbacks mean you can safely undo changes.
+                        </p>
+                        <!-- Visual -->
+                        <div class="flex flex-col gap-3">
+                            <div id="backup-timeline" class="h-16 bg-canvas rounded-lg border border-border/50 relative flex items-center justify-between px-6">
+                                <div class="absolute top-1/2 left-6 right-6 h-0.5 bg-border"></div>
+                                <div class="backup-dot w-3 h-3 bg-border rounded-full relative z-10"></div>
+                                <div class="backup-dot w-3 h-3 bg-border rounded-full relative z-10"></div>
+                                <div id="backup-now" class="w-4 h-4 bg-obsidian border-2 border-white rounded-full relative z-20 shadow-sm transition-transform duration-500 ease-out">
+                                    <div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[9px] bg-obsidian text-white px-1.5 py-0.5 rounded whitespace-nowrap">Now</div>
+                                </div>
+                                <div class="backup-dot w-3 h-3 bg-border/30 rounded-full relative z-10"></div>
+                            </div>
+                            <button id="whoops-btn" class="self-start px-3 py-1.5 bg-canvas border border-border rounded-lg text-xs font-medium text-obsidian hover:bg-white hover:shadow-sm active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer">
+                                <iconify-icon icon="solar:undo-left-linear" width="14"></iconify-icon>
+                                <span id="whoops-label">Whoops</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Side Card 2: User Mgmt -->
+                    <div class="reveal reveal-delay-2 md:col-span-4 group relative bg-white border border-border rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 p-8">
+                        <div class="w-10 h-10 bg-canvas border border-border rounded-lg flex items-center justify-center mb-4 text-obsidian">
+                            <iconify-icon icon="solar:users-group-rounded-linear" width="20" stroke-width="1.5"></iconify-icon>
+                        </div>
+                        <h3 class="text-lg font-semibold text-obsidian mb-2">User Management</h3>
+                        <p class="text-sm text-subtle mb-6">
+                            See, organize, and control the people using your apps.
+                        </p>
+                        <!-- Visual: cycling user cards on hover -->
+                        <div id="user-card-list" class="space-y-2 overflow-hidden"></div>
+                    </div>
+
+                    <!-- Bottom Wide: Security -->
+                    <div id="security-card" class="reveal reveal-delay-3 md:col-span-6 group relative bg-white border border-border rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 p-8">
+                        <div class="flex flex-row items-center gap-6">
+                            <div class="flex-1">
+                                <div class="w-10 h-10 bg-canvas border border-border rounded-lg flex items-center justify-center mb-4 text-obsidian">
+                                    <iconify-icon icon="solar:shield-keyhole-linear" width="20" stroke-width="1.5"></iconify-icon>
+                                </div>
+                                <h3 class="text-lg font-semibold text-obsidian mb-2">Security Handled</h3>
+                                <p class="text-sm text-subtle">
+                                    Private servers, safe defaults, and isolation built in. Your app and data are protected from day one.
+                                </p>
+                            </div>
+                            <div id="security-lock" class="w-24 h-24 shrink-0 flex items-center justify-center cursor-pointer hover:scale-110 active:scale-95 transition-transform">
+                                <iconify-icon id="lock-unlocked" icon="solar:lock-password-unlocked-linear" width="48" class="text-border transition-all duration-400"></iconify-icon>
+                                <iconify-icon id="lock-locked" icon="solar:lock-password-bold" width="48" class="text-emerald-500 absolute transition-all duration-400 security-lock-hidden"></iconify-icon>
+                            </div>
+                        </div>
+                        <!-- Gandalf GIF — hidden until lock is clicked -->
+                        <div id="security-gif-wrap" class="security-gif-wrap mt-0">
+                            <div class="security-gif-inner">
+                                <img src="gandalf-you-shall-not-past.gif" class="w-full rounded-xl border border-border shadow-sm" alt="You shall not pass">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Wide: Storage -->
+                    <div class="reveal reveal-delay-4 md:col-span-6 group relative bg-white border border-border rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 p-8 flex flex-row items-center gap-6">
+                        <div class="flex-1">
+                            <div class="w-10 h-10 bg-canvas border border-border rounded-lg flex items-center justify-center mb-4 text-obsidian">
+                                <iconify-icon icon="solar:cloud-upload-linear" width="20" stroke-width="1.5"></iconify-icon>
+                            </div>
+                            <h3 class="text-lg font-semibold text-obsidian mb-2">File Storage</h3>
+                            <p class="text-sm text-subtle">
+                                Give your apps the file storage they require so your users can upload files, pictures, and videos.
+                            </p>
+                        </div>
+                        <div id="storage-photos" class="w-28 h-28 shrink-0 relative">
+                            <img src="Black and White Website photos/The_Great_Wave_off_Kanagawa.jpg" class="storage-photo active absolute inset-0 w-full h-full object-cover rounded-lg border border-border shadow-sm" alt="Great Wave">
+                            <img src="Black and White Website photos/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg" class="storage-photo absolute inset-0 w-full h-full object-cover rounded-lg border border-border shadow-sm" alt="Starry Night">
+                            <img src="Black and White Website photos/Adams_The_Tetons_and_the_Snake_River.jpg" class="storage-photo absolute inset-0 w-full h-full object-cover rounded-lg border border-border shadow-sm" alt="Tetons">
+                            <img src="Black and White Website photos/Screenshot_2026-02-07_at_12.00.31_AM.png" class="storage-photo absolute inset-0 w-full h-full object-cover rounded-lg border border-border shadow-sm" alt="Screenshot 1">
+                            <img src="Black and White Website photos/Screenshot_2026-02-07_at_12.04.46_AM.png" class="storage-photo absolute inset-0 w-full h-full object-cover rounded-lg border border-border shadow-sm" alt="Screenshot 2">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Integrations Section -->
+        <section id="integrations" class="relative py-24 px-6 md:px-12 border-y border-border/50 bg-white overflow-hidden">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-0 items-start">
+
+                    <!-- LEFT COLUMN: Text Content -->
+                    <div class="flex flex-col gap-6 py-8 lg:pr-12">
+
+                        <!-- Badge -->
+                        <div class="reveal">
+                            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-canvas text-xs font-mono text-subtle tracking-wider uppercase">
+                                <span class="w-1.5 h-1.5 bg-accent rounded-full animate-pulse"></span>
+                                Integrations
+                            </span>
+                        </div>
+
+                        <!-- Heading -->
+                        <h2 class="reveal reveal-delay-1 font-sans text-3xl md:text-4xl lg:text-5xl font-semibold text-obsidian tracking-tight leading-tight">
+                            Add integrations with one click.
+                        </h2>
+
+                        <!-- Description -->
+                        <p class="reveal reveal-delay-2 text-base md:text-lg text-subtle leading-relaxed max-w-md">
+                            Add email, SMS, domains, and hosting instantly with more integrations coming soon.
+                        </p>
+
+                        <!-- CTA Button -->
+                        <div class="reveal reveal-delay-3">
+                            <a href="#pricing" class="group inline-flex items-center gap-3 px-6 py-3 bg-obsidian text-white rounded-xl font-medium text-sm shadow-lg shadow-obsidian/10 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-0.5 transition-all duration-300">
+                                Get started
+                                <span class="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+                                    <iconify-icon icon="solar:arrow-right-linear" width="14" style="color: #171717;" class="group-hover:translate-x-0.5 transition-transform"></iconify-icon>
+                                </span>
+                            </a>
+                        </div>
+
+                        <!-- Numbered Steps -->
+                        <div class="flex flex-col gap-5 mt-4">
+
+                            <div class="reveal reveal-delay-3 group flex items-start gap-4 cursor-default">
+                                <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-obsidian text-white font-mono text-xs font-semibold transition-all duration-300 group-hover:shadow-lg group-hover:scale-105">01</span>
+                                <div class="pt-2">
+                                    <p class="text-sm text-subtle leading-relaxed">Explore supported integrations and platforms</p>
+                                </div>
+                            </div>
+
+                            <div class="reveal reveal-delay-4 group flex items-start gap-4 cursor-default">
+                                <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-obsidian text-white font-mono text-xs font-semibold transition-all duration-300 group-hover:shadow-lg group-hover:scale-105">02</span>
+                                <div class="pt-2">
+                                    <p class="text-sm text-subtle leading-relaxed">Securely link your account with a single API key</p>
+                                </div>
+                            </div>
+
+                            <div class="reveal reveal-delay-5 group flex items-start gap-4 cursor-default">
+                                <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-obsidian text-white font-mono text-xs font-semibold transition-all duration-300 group-hover:shadow-lg group-hover:scale-105">03</span>
+                                <div class="pt-2">
+                                    <p class="text-sm text-subtle leading-relaxed">Sync and streamline your workflow instantly</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- CENTER DIVIDER (desktop only) -->
+                    <div class="hidden lg:flex flex-col items-center self-stretch py-8">
+                        <div class="flex-1 w-px bg-gradient-to-b from-transparent via-border to-transparent"></div>
+                    </div>
+
+                    <!-- RIGHT COLUMN: Logo Marquee -->
+                    <div class="reveal flex flex-col gap-4 py-8 lg:pl-12 overflow-hidden" style="mask-image: linear-gradient(to bottom, transparent, black 8%, black 92%, transparent); -webkit-mask-image: linear-gradient(to bottom, transparent, black 8%, black 92%, transparent);">
+
+                        <!-- Marquee Row 1: scrolls left -->
+                        <div class="flex overflow-hidden" style="mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);">
+                            <div class="flex gap-3 animate-marquee">
+                                <!-- Set 1 -->
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:cursor" width="28" height="28" style="color: #171717;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Cursor</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:stackblitz" width="28" height="28" style="color: #1389FD;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Bolt</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:v0" width="28" height="28" style="color: #171717;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">v0</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <span class="text-2xl leading-none" style="color: #FF6B6B;">&#9829;</span>
+                                    <span class="text-[10px] text-subtle font-mono">Lovable</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:replit" width="28" height="28" style="color: #F26207;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Replit</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:claude" width="28" height="28" style="color: #D97757;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Claude</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:openai" width="28" height="28" style="color: #412991;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">ChatGPT</span>
+                                </div>
+                                <!-- Set 2 (duplicate for seamless loop) -->
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:cursor" width="28" height="28" style="color: #171717;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Cursor</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:stackblitz" width="28" height="28" style="color: #1389FD;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Bolt</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:v0" width="28" height="28" style="color: #171717;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">v0</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <span class="text-2xl leading-none" style="color: #FF6B6B;">&#9829;</span>
+                                    <span class="text-[10px] text-subtle font-mono">Lovable</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:replit" width="28" height="28" style="color: #F26207;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Replit</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:claude" width="28" height="28" style="color: #D97757;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Claude</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:openai" width="28" height="28" style="color: #412991;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">ChatGPT</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Marquee Row 2: scrolls right (reverse) -->
+                        <div class="flex overflow-hidden" style="mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);">
+                            <div class="flex gap-3 animate-marquee-reverse">
+                                <!-- Set 1 -->
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:vercel" width="28" height="28" style="color: #171717;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Vercel</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:netlify" width="28" height="28" style="color: #00C7B7;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Netlify</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:github" width="28" height="28" style="color: #171717;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">GitHub</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:supabase" width="28" height="28" style="color: #3FCF8E;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Supabase</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:firebase" width="28" height="28" style="color: #DD2C00;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Firebase</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:nextdotjs" width="28" height="28" style="color: #171717;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Next.js</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:windsurf" width="28" height="28" style="color: #00B4D8;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Windsurf</span>
+                                </div>
+                                <!-- Set 2 (duplicate for seamless loop) -->
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:vercel" width="28" height="28" style="color: #171717;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Vercel</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:netlify" width="28" height="28" style="color: #00C7B7;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Netlify</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:github" width="28" height="28" style="color: #171717;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">GitHub</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:supabase" width="28" height="28" style="color: #3FCF8E;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Supabase</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:firebase" width="28" height="28" style="color: #DD2C00;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Firebase</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:nextdotjs" width="28" height="28" style="color: #171717;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Next.js</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:windsurf" width="28" height="28" style="color: #00B4D8;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Windsurf</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Marquee Row 3: scrolls left (slower) -->
+                        <div class="flex overflow-hidden" style="mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);">
+                            <div class="flex gap-3" style="animation: marquee-scroll 40s linear infinite;">
+                                <!-- Set 1 -->
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:stripe" width="28" height="28" style="color: #635BFF;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Stripe</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:resend" width="28" height="28" style="color: #171717;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Resend</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:cloudflare" width="28" height="28" style="color: #F38020;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Cloudflare</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:twilio" width="28" height="28" style="color: #F22F46;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Twilio</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:react" width="28" height="28" style="color: #61DAFB;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">React</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:svelte" width="28" height="28" style="color: #FF3E00;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Svelte</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:nuxtdotjs" width="28" height="28" style="color: #00DC82;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Nuxt</span>
+                                </div>
+                                <!-- Set 2 (duplicate) -->
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:stripe" width="28" height="28" style="color: #635BFF;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Stripe</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:resend" width="28" height="28" style="color: #171717;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Resend</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:cloudflare" width="28" height="28" style="color: #F38020;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Cloudflare</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:twilio" width="28" height="28" style="color: #F22F46;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Twilio</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:react" width="28" height="28" style="color: #61DAFB;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">React</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:svelte" width="28" height="28" style="color: #FF3E00;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Svelte</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:nuxtdotjs" width="28" height="28" style="color: #00DC82;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Nuxt</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Marquee Row 4: scrolls right (slower) -->
+                        <div class="flex overflow-hidden" style="mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);">
+                            <div class="flex gap-3" style="animation: marquee-scroll-reverse 35s linear infinite;">
+                                <!-- Set 1 -->
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:postgresql" width="28" height="28" style="color: #4169E1;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Postgres</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:docker" width="28" height="28" style="color: #2496ED;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Docker</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:amazonaws" width="28" height="28" style="color: #FF9900;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">AWS</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:tailwindcss" width="28" height="28" style="color: #06B6D4;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Tailwind</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:vuedotjs" width="28" height="28" style="color: #4FC08D;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Vue</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:typescript" width="28" height="28" style="color: #3178C6;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">TypeScript</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:zapier" width="28" height="28" style="color: #FF4F00;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Zapier</span>
+                                </div>
+                                <!-- Set 2 (duplicate) -->
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:postgresql" width="28" height="28" style="color: #4169E1;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Postgres</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:docker" width="28" height="28" style="color: #2496ED;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Docker</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:amazonaws" width="28" height="28" style="color: #FF9900;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">AWS</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:tailwindcss" width="28" height="28" style="color: #06B6D4;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Tailwind</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:vuedotjs" width="28" height="28" style="color: #4FC08D;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Vue</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:typescript" width="28" height="28" style="color: #3178C6;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">TypeScript</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[88px] h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:zapier" width="28" height="28" style="color: #FF4F00;"></iconify-icon>
+                                    <span class="text-[10px] text-subtle font-mono">Zapier</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Simple Pricing -->
+        <section id="pricing" class="py-24 px-6 md:px-12 bg-canvas">
+            <div class="max-w-5xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="reveal font-sans text-3xl font-semibold text-obsidian tracking-tight mb-4">
+                        Progression over perfection.
+                    </h2>
+                    <p class="reveal reveal-delay-1 text-subtle">
+                        Start simple, validate ideas, and later scale successful apps.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
+                    <!-- Hobby -->
+                    <div class="reveal p-8 rounded-2xl border border-border bg-white hover:border-obsidian/30 transition-colors">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="font-semibold text-obsidian">Hobby</span>
+                            <span class="text-xs font-mono bg-canvas border border-border px-2 py-1 rounded">FREE</span>
+                        </div>
+                        <p class="text-sm text-subtle mb-8 min-h-[40px]">Perfect for testing ideas and building your first vibe app.</p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-center gap-3 text-sm text-subtle">
+                                <iconify-icon icon="solar:check-circle-linear" class="text-obsidian"></iconify-icon>
+                                1 App
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-subtle">
+                                <iconify-icon icon="solar:check-circle-linear" class="text-obsidian"></iconify-icon>
+                                Shared Database
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-subtle">
+                                <iconify-icon icon="solar:check-circle-linear" class="text-obsidian"></iconify-icon>
+                                Community Support
+                            </li>
+                        </ul>
+                        <button class="w-full py-2.5 rounded-lg border border-border text-xs font-semibold text-obsidian bg-white hover:bg-gray-50 transition-colors">Start for Free</button>
+                    </div>
+
+                    <!-- Pro -->
+                    <div class="reveal reveal-delay-1 p-8 rounded-2xl border border-obsidian/10 bg-white shadow-xl shadow-gray-200/50 relative overflow-hidden">
+                        <div class="absolute top-0 inset-x-0 h-1 bg-obsidian"></div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="font-semibold text-obsidian">Pro Builder</span>
+                            <span class="text-xl font-bold text-obsidian">$29<span class="text-xs font-normal text-subtle">/mo</span></span>
+                        </div>
+                        <p class="text-sm text-subtle mb-8 min-h-[40px]">For vibe coders ready to launch real products.</p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-center gap-3 text-sm text-subtle">
+                                <iconify-icon icon="solar:check-circle-bold" class="text-obsidian"></iconify-icon>
+                                Unlimited Apps
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-subtle">
+                                <iconify-icon icon="solar:check-circle-bold" class="text-obsidian"></iconify-icon>
+                                Dedicated DB &amp; Backups
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-subtle">
+                                <iconify-icon icon="solar:check-circle-bold" class="text-obsidian"></iconify-icon>
+                                Priority Support
+                            </li>
+                        </ul>
+                        <button class="w-full py-2.5 rounded-lg bg-obsidian text-xs font-semibold text-white hover:bg-gray-800 transition-colors shadow-lg shadow-obsidian/20">Get Started</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-canvas border-t border-border py-16 px-6 md:px-12">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-12">
+            <div class="space-y-4 max-w-xs">
+                <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 bg-obsidian text-white flex items-center justify-center rounded">
+                        <iconify-icon icon="solar:bolt-linear" width="14"></iconify-icon>
+                    </div>
+                    <span class="font-bold text-sm tracking-tight text-obsidian">PopDB</span>
+                </div>
+                <p class="text-xs text-subtle leading-relaxed">
+                    The backend for the rest of us. Built for the AI generation.
+                </p>
+                <div class="text-[10px] text-border">&copy; 2025 PopDB Inc.</div>
+            </div>
+
+            <div class="flex gap-16">
+                <div class="space-y-4">
+                    <h4 class="text-xs font-semibold text-obsidian">Product</h4>
+                    <ul class="space-y-2 text-xs text-subtle">
+                        <li><a href="#" class="hover:text-obsidian transition-colors">Manifesto</a></li>
+                        <li><a href="#" class="hover:text-obsidian transition-colors">Pricing</a></li>
+                        <li><a href="#" class="hover:text-obsidian transition-colors">Changelog</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <h4 class="text-xs font-semibold text-obsidian">Resources</h4>
+                    <ul class="space-y-2 text-xs text-subtle">
+                        <li><a href="#" class="hover:text-obsidian transition-colors">Documentation</a></li>
+                        <li><a href="#" class="hover:text-obsidian transition-colors">Community</a></li>
+                        <li><a href="#" class="hover:text-obsidian transition-colors">Help Center</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <h4 class="text-xs font-semibold text-obsidian">Legal</h4>
+                    <ul class="space-y-2 text-xs text-subtle">
+                        <li><a href="#" class="hover:text-obsidian transition-colors">Privacy</a></li>
+                        <li><a href="#" class="hover:text-obsidian transition-colors">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll Reveal & Marquee Hover Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Scroll Reveal via Intersection Observer
+            const revealElements = document.querySelectorAll('.reveal');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.15,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            revealElements.forEach(el => observer.observe(el));
+
+            // Pause marquee on hover
+            document.querySelectorAll('.animate-marquee, .animate-marquee-reverse, [style*="marquee-scroll"]').forEach(marquee => {
+                const parent = marquee.parentElement;
+                parent.addEventListener('mouseenter', () => {
+                    marquee.style.animationPlayState = 'paused';
+                });
+                parent.addEventListener('mouseleave', () => {
+                    marquee.style.animationPlayState = 'running';
+                });
+            });
+
+            // Feature Accordion: expand on hover
+            const featureCards = document.querySelectorAll('.feature-card');
+            if (featureCards.length > 0) {
+                featureCards.forEach(card => {
+                    card.addEventListener('mouseenter', () => {
+                        featureCards.forEach(c => c.classList.remove('active'));
+                        card.classList.add('active');
+                    });
+                });
+            }
+
+            // Interactive Deploy Button
+            const deployBtn = document.getElementById('deploy-btn');
+            const deployViz = document.getElementById('deploy-viz');
+            const deployLive = document.getElementById('deploy-live');
+            const toggleStaging = document.getElementById('toggle-staging');
+            const toggleProduction = document.getElementById('toggle-production');
+
+            if (deployBtn && deployViz && deployLive) {
+                let deploying = false;
+
+                deployBtn.addEventListener('click', () => {
+                    if (deploying) return;
+                    deploying = true;
+
+                    // Stop the button pulse hint
+                    deployBtn.classList.remove('deploy-btn-pulse');
+                    deployBtn.disabled = true;
+                    deployBtn.style.opacity = '0.6';
+
+                    // Phase 1: Dot travels, arrow lights up
+                    deployViz.classList.add('deploy-active');
+
+                    // Phase 2: LIVE turns green + checkmark + toggle to Production
+                    setTimeout(() => {
+                        deployViz.classList.add('deploy-success');
+                        if (toggleStaging && toggleProduction) {
+                            toggleStaging.classList.remove('bg-white', 'shadow-sm', 'border', 'border-border/50', 'text-obsidian');
+                            toggleStaging.classList.add('text-subtle');
+                            toggleProduction.classList.remove('text-subtle');
+                            toggleProduction.classList.add('bg-white', 'shadow-sm', 'border', 'border-border/50', 'text-obsidian');
+                        }
+                    }, 800);
+
+                    // Phase 3: Confetti burst from LIVE box
+                    setTimeout(() => {
+                        const rect = deployLive.getBoundingClientRect();
+                        const x = (rect.left + rect.width / 2) / window.innerWidth;
+                        const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+                        // Main burst
+                        confetti({
+                            particleCount: 80,
+                            spread: 70,
+                            origin: { x, y },
+                            colors: ['#10B981', '#34D399', '#6EE7B7', '#171717', '#3B82F6'],
+                            ticks: 120,
+                            gravity: 1.2,
+                            scalar: 0.9,
+                        });
+
+                        // Second smaller burst slightly delayed
+                        setTimeout(() => {
+                            confetti({
+                                particleCount: 30,
+                                spread: 40,
+                                origin: { x: x + 0.02, y: y - 0.02 },
+                                colors: ['#10B981', '#A7F3D0', '#FFFFFF'],
+                                ticks: 80,
+                                gravity: 1.5,
+                                scalar: 0.7,
+                            });
+                        }, 150);
+                    }, 1200);
+
+                    // Phase 4: Reset after hold
+                    setTimeout(() => {
+                        deployViz.classList.remove('deploy-active', 'deploy-success');
+                        deployBtn.disabled = false;
+                        deployBtn.style.opacity = '1';
+                        deployBtn.classList.add('deploy-btn-pulse');
+                        if (toggleStaging && toggleProduction) {
+                            toggleProduction.classList.remove('bg-white', 'shadow-sm', 'border', 'border-border/50', 'text-obsidian');
+                            toggleProduction.classList.add('text-subtle');
+                            toggleStaging.classList.remove('text-subtle');
+                            toggleStaging.classList.add('bg-white', 'shadow-sm', 'border', 'border-border/50', 'text-obsidian');
+                        }
+                        deploying = false;
+                    }, 3500);
+                });
+            }
+
+            // Interactive Whoops (Backup Rollback) Button
+            const whoopsBtn = document.getElementById('whoops-btn');
+            const backupNow = document.getElementById('backup-now');
+            const backupTimeline = document.getElementById('backup-timeline');
+
+            if (whoopsBtn && backupNow && backupTimeline) {
+                let rewinding = false;
+                const whoopsLabel = document.getElementById('whoops-label');
+                const oopsPhrases = [
+                    'Oops', 'Whoops', 'Oopsie', 'Whoopsie', 'My bad', 'Sorry',
+                    'Uh-oh', 'Aw, crap', 'Dang it', 'Whoop-daisy', 'Oopsy-daisy',
+                    'Welp', 'Heh\u2026 my bad', 'Silly me', 'Oh no', 'Yikes', 'Eek',
+                    'Uh\u2026 that\'s not right', 'Welp, that happened', 'Oof',
+                    'Egads', 'Alas', 'Woe is me', 'Oh dear', 'Heavens',
+                    'Curse my hubris', 'That one\'s on me', 'I have made a mistake',
+                    'Rookie move', 'That\'s embarrassing', 'I regret everything',
+                    'Nailed it (not)', 'Cool cool cool', 'Great. Just great.',
+                    'Love that for me', 'Fantastic', 'Crap', 'S***', 'D*** it',
+                    'F***', 'Welp\u2026 f***'
+                ];
+                let phraseIndex = 0;
+
+                whoopsBtn.addEventListener('click', () => {
+                    if (rewinding) return;
+                    rewinding = true;
+                    whoopsBtn.disabled = true;
+                    whoopsBtn.style.opacity = '0.6';
+
+                    // Cycle through phrases top to bottom
+                    if (whoopsLabel) whoopsLabel.textContent = oopsPhrases[phraseIndex];
+                    phraseIndex = (phraseIndex + 1) % oopsPhrases.length;
+
+                    // Calculate gap between Now dot and previous dot
+                    const dots = backupTimeline.querySelectorAll('.backup-dot');
+                    const nowRect = backupNow.getBoundingClientRect();
+                    const prevDot = dots[1];
+                    const prevRect = prevDot.getBoundingClientRect();
+                    const shift = (prevRect.left + prevRect.width / 2) - (nowRect.left + nowRect.width / 2);
+
+                    // Hop back
+                    backupNow.style.transform = `translateX(${shift}px)`;
+
+                    // Reset after 2s
+                    setTimeout(() => {
+                        backupNow.style.transform = 'translateX(0)';
+                        setTimeout(() => {
+                            whoopsBtn.disabled = false;
+                            whoopsBtn.style.opacity = '1';
+                            rewinding = false;
+                        }, 500);
+                    }, 2000);
+                });
+            }
+
+            // User Management: cycling card list on hover
+            const userCardList = document.getElementById('user-card-list');
+            const userCardParent = userCardList ? userCardList.closest('.group') : null;
+
+            if (userCardList && userCardParent) {
+                const users = [
+                    { name: 'w-16', avatar: 'from-gray-200 to-gray-300', status: 'Active', statusBg: 'bg-green-50', statusText: 'text-green-600', bg: 'bg-white', avatarOpacity: '' },
+                    { name: 'w-12', avatar: 'from-gray-200 to-gray-300', status: 'Invited', statusBg: 'bg-gray-50', statusText: 'text-gray-400', bg: 'bg-canvas/50', avatarOpacity: 'opacity-50' },
+                    { name: 'w-20', avatar: 'from-blue-200 to-blue-300', status: 'New', statusBg: 'bg-blue-50', statusText: 'text-blue-600', bg: 'bg-white', avatarOpacity: '' },
+                    { name: 'w-14', avatar: 'from-purple-200 to-purple-300', status: 'Active', statusBg: 'bg-green-50', statusText: 'text-green-600', bg: 'bg-white', avatarOpacity: '' },
+                    { name: 'w-10', avatar: 'from-amber-200 to-amber-300', status: 'Pending', statusBg: 'bg-amber-50', statusText: 'text-amber-600', bg: 'bg-canvas/50', avatarOpacity: 'opacity-50' },
+                    { name: 'w-18', avatar: 'from-rose-200 to-rose-300', status: 'Active', statusBg: 'bg-green-50', statusText: 'text-green-600', bg: 'bg-white', avatarOpacity: '' },
+                    { name: 'w-11', avatar: 'from-teal-200 to-teal-300', status: 'Invited', statusBg: 'bg-gray-50', statusText: 'text-gray-400', bg: 'bg-canvas/50', avatarOpacity: 'opacity-50' },
+                ];
+
+                let currentIndex = 0;
+                let cycleInterval = null;
+
+                function createCard(user) {
+                    const div = document.createElement('div');
+                    div.className = `user-card flex items-center gap-3 p-2 rounded border border-border/50 ${user.bg}`;
+                    div.innerHTML = `
+                        <div class="w-6 h-6 rounded-full bg-gradient-to-tr ${user.avatar} ${user.avatarOpacity}"></div>
+                        <div class="h-2 ${user.name} bg-gray-100 rounded"></div>
+                        <div class="ml-auto px-2 py-0.5 text-[9px] ${user.statusBg} ${user.statusText} rounded">${user.status}</div>
+                    `;
+                    return div;
+                }
+
+                // Render initial 3 cards
+                function renderInitial() {
+                    userCardList.innerHTML = '';
+                    for (let i = 0; i < 3; i++) {
+                        userCardList.appendChild(createCard(users[(currentIndex + i) % users.length]));
+                    }
+                }
+                renderInitial();
+
+                function cycleCards() {
+                    const cards = userCardList.querySelectorAll('.user-card');
+                    if (cards.length === 0) return;
+
+                    // Fade out the top card
+                    cards[0].classList.add('fade-out');
+
+                    setTimeout(() => {
+                        // Remove top card
+                        cards[0].remove();
+
+                        // Add new card at bottom with fade-in
+                        currentIndex = (currentIndex + 1) % users.length;
+                        const newUser = users[(currentIndex + 2) % users.length];
+                        const newCard = createCard(newUser);
+                        newCard.classList.add('fade-in');
+                        userCardList.appendChild(newCard);
+
+                        // Trigger reflow then remove fade-in class
+                        requestAnimationFrame(() => {
+                            requestAnimationFrame(() => {
+                                newCard.classList.remove('fade-in');
+                            });
+                        });
+                    }, 400);
+                }
+
+                userCardParent.addEventListener('mouseenter', () => {
+                    if (cycleInterval) return;
+                    cycleInterval = setInterval(cycleCards, 1500);
+                });
+
+                userCardParent.addEventListener('mouseleave', () => {
+                    clearInterval(cycleInterval);
+                    cycleInterval = null;
+                });
+            }
+
+            // File Storage: photo cycling on hover
+            const storagePhotos = document.getElementById('storage-photos');
+            const storageCard = storagePhotos ? storagePhotos.closest('.group') : null;
+
+            if (storagePhotos && storageCard) {
+                const photos = storagePhotos.querySelectorAll('.storage-photo');
+                let currentPhoto = 0;
+                let photoInterval = null;
+
+                storageCard.addEventListener('mouseenter', () => {
+                    if (photoInterval) return;
+                    photoInterval = setInterval(() => {
+                        photos[currentPhoto].classList.remove('active');
+                        currentPhoto = (currentPhoto + 1) % photos.length;
+                        photos[currentPhoto].classList.add('active');
+                    }, 1200);
+                });
+
+                storageCard.addEventListener('mouseleave', () => {
+                    clearInterval(photoInterval);
+                    photoInterval = null;
+                });
+            }
+
+            // Security: Lock click → close lock → reveal GIF
+            const securityLock = document.getElementById('security-lock');
+            const lockUnlocked = document.getElementById('lock-unlocked');
+            const lockLocked = document.getElementById('lock-locked');
+            const securityGifWrap = document.getElementById('security-gif-wrap');
+
+            if (securityLock && lockUnlocked && lockLocked && securityGifWrap) {
+                let locked = false;
+
+                securityLock.addEventListener('click', () => {
+                    if (locked) {
+                        // Unlock: hide locked icon, show unlocked, close GIF
+                        lockLocked.classList.remove('security-lock-visible');
+                        lockLocked.classList.add('security-lock-hidden');
+                        setTimeout(() => {
+                            lockUnlocked.classList.remove('security-lock-fade');
+                        }, 200);
+                        securityGifWrap.classList.remove('open');
+                        locked = false;
+                    } else {
+                        // Lock: hide unlocked icon, show locked, open GIF
+                        lockUnlocked.classList.add('security-lock-fade');
+                        setTimeout(() => {
+                            lockLocked.classList.remove('security-lock-hidden');
+                            lockLocked.classList.add('security-lock-visible');
+                        }, 200);
+                        setTimeout(() => {
+                            securityGifWrap.classList.add('open');
+                        }, 400);
+                        locked = true;
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>

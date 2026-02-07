@@ -194,41 +194,44 @@
             animation: btn-pulse 2s ease infinite;
         }
 
-        /* ===== Top 3 Features: Expanding Accordion ===== */
+        /* ===== Top 3 Features: Horizontal Expand on Hover ===== */
         .feature-card {
             border: 1px solid #E5E5E5;
             background: rgba(255, 255, 255, 0.7);
             border-radius: 20px;
             padding: 28px 32px;
             cursor: pointer;
-            transition: background 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+            flex: 1;
+            min-width: 0;
+            transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                        background 0.5s cubic-bezier(0.4, 0, 0.2, 1),
                         border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
                         box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .feature-card.active {
+            flex: 2.5;
             background: rgba(255, 255, 255, 0.95);
             border-color: rgba(23, 23, 23, 0.15);
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
         }
         .feature-card .feature-image-wrap {
             display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            grid-template-columns: 0fr;
+            transition: grid-template-columns 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .feature-card.active .feature-image-wrap {
-            grid-template-rows: 1fr;
+            grid-template-columns: 1fr;
         }
         .feature-card .feature-image-inner {
             overflow: hidden;
+            min-width: 0;
         }
         .feature-card .feature-image-inner > * {
             opacity: 0;
-            transform: translateY(8px);
-            transition: opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s;
+            transition: opacity 0.4s ease 0.2s;
         }
         .feature-card.active .feature-image-inner > * {
             opacity: 1;
-            transform: translateY(0);
         }
         .feature-card .feature-number {
             color: #AEAEAE;
@@ -236,6 +239,15 @@
         }
         .feature-card.active .feature-number {
             color: #171717;
+        }
+        @media (max-width: 767px) {
+            .feature-card { flex: none; }
+            .feature-card .feature-image-wrap {
+                grid-template-columns: 1fr !important;
+            }
+            .feature-card .feature-image-inner > * {
+                opacity: 1 !important;
+            }
         }
 
         /* ===== User Management: Card cycling ===== */
@@ -389,49 +401,8 @@
                         <div class="w-10"></div>
                     </div>
 
-                    <!-- App Canvas -->
-                    <div class="p-8 md:p-12 flex flex-col items-center justify-center min-h-[300px] relative bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]">
-
-                        <!-- Central Node -->
-                        <div class="relative z-10 flex flex-col items-center gap-6">
-                            <!-- Connection Lines -->
-                            <div class="absolute inset-0 flex items-center justify-center -z-10">
-                                <div class="w-[300px] h-[1px] bg-gradient-to-r from-transparent via-border to-transparent"></div>
-                                <div class="absolute w-[1px] h-[200px] bg-gradient-to-b from-transparent via-border to-transparent"></div>
-                            </div>
-
-                            <!-- Main App Block -->
-                            <div class="w-48 h-32 bg-white rounded-xl border border-obsidian/10 shadow-xl flex flex-col items-center justify-center gap-3 relative group hover:scale-105 transition-transform duration-300">
-                                <div class="absolute -top-3 px-3 py-1 bg-obsidian text-white text-[10px] font-medium rounded-full shadow-lg">Production</div>
-                                <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 border border-border flex items-center justify-center text-obsidian">
-                                    <iconify-icon icon="solar:smartphone-linear" width="24" stroke-width="1.5"></iconify-icon>
-                                </div>
-                                <span class="text-xs font-semibold text-obsidian">My Travel Planner</span>
-                            </div>
-
-                            <!-- Satellites -->
-                            <div class="grid grid-cols-3 gap-16 w-full max-w-lg">
-                                <div class="flex flex-col items-center gap-2 group cursor-default">
-                                    <div class="w-10 h-10 rounded-lg bg-white border border-border shadow-sm flex items-center justify-center text-subtle group-hover:text-obsidian group-hover:border-obsidian/30 transition-all">
-                                        <iconify-icon icon="solar:database-linear" width="20" stroke-width="1.5"></iconify-icon>
-                                    </div>
-                                    <span class="text-[10px] font-mono text-subtle uppercase tracking-wider">Database</span>
-                                </div>
-                                <div class="flex flex-col items-center gap-2 group cursor-default">
-                                    <div class="w-10 h-10 rounded-lg bg-white border border-border shadow-sm flex items-center justify-center text-subtle group-hover:text-obsidian group-hover:border-obsidian/30 transition-all">
-                                        <iconify-icon icon="solar:shield-check-linear" width="20" stroke-width="1.5"></iconify-icon>
-                                    </div>
-                                    <span class="text-[10px] font-mono text-subtle uppercase tracking-wider">Auth</span>
-                                </div>
-                                <div class="flex flex-col items-center gap-2 group cursor-default">
-                                    <div class="w-10 h-10 rounded-lg bg-white border border-border shadow-sm flex items-center justify-center text-subtle group-hover:text-obsidian group-hover:border-obsidian/30 transition-all">
-                                        <iconify-icon icon="solar:folder-with-files-linear" width="20" stroke-width="1.5"></iconify-icon>
-                                    </div>
-                                    <span class="text-[10px] font-mono text-subtle uppercase tracking-wider">Storage</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- App Screenshot -->
+                    <img src="Screen! Vibe Coder Sidebar.png" alt="PopDB App Builder" class="w-full h-auto block">
                 </div>
             </div>
         </section>
@@ -439,50 +410,54 @@
         <!-- Top 3 Features (Expanding Accordion) -->
         <section class="py-20 px-6 md:px-12 border-y border-border/50 bg-canvas/50">
             <div class="max-w-7xl mx-auto">
-                <div id="feature-accordion" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div id="feature-accordion" class="flex flex-col md:flex-row gap-4 items-stretch">
 
-                    <!-- Card 1: App Builder -->
+                    <!-- Card 1: Start Building Now -->
                     <div class="reveal feature-card active" data-feature="0">
-                        <div class="flex items-start gap-4">
-                            <span class="feature-number font-mono text-sm font-medium mt-0.5">01</span>
-                            <div class="flex-1">
-                                <h3 class="font-sans text-lg font-semibold text-obsidian mb-1">Start Building Now</h3>
-                                <p class="font-sans text-sm text-subtle leading-relaxed">
-                                    PopDB comes with a simple but powerful app builder that helps you start building apps even with no prior experience.
-                                </p>
+                        <div class="flex items-center gap-6">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-start gap-4">
+                                    <span class="feature-number font-mono text-sm font-medium mt-0.5">01</span>
+                                    <div>
+                                        <h3 class="font-sans text-lg font-semibold text-obsidian mb-1">Start Building Now</h3>
+                                        <p class="font-sans text-sm text-subtle leading-relaxed">
+                                            PopDB comes with a simple but powerful app builder that helps you start building apps even with no prior experience.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="feature-image-wrap mt-4">
-                            <div class="feature-image-inner">
-                                <div class="h-48 bg-canvas rounded-2xl border border-border/50 flex items-center justify-center relative overflow-hidden">
-                                    <div class="absolute inset-0 bg-[radial-gradient(#00000008_1px,transparent_1px)] [background-size:12px_12px]"></div>
-                                    <div class="relative flex flex-col items-center gap-2 text-border">
-                                        <iconify-icon icon="solar:magic-stick-3-linear" width="32" stroke-width="1"></iconify-icon>
-                                        <span class="text-[10px] font-mono uppercase tracking-wider">App Builder Preview</span>
+                            <div class="feature-image-wrap">
+                                <div class="feature-image-inner">
+                                    <div class="rounded-2xl border border-border/50 overflow-hidden w-44 h-44 shrink-0">
+                                        <img src="One Click Purple.png" alt="Quick Setup Guide" class="w-full h-full object-cover block">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Card 2: Database -->
+                    <!-- Card 2: Private Database -->
                     <div class="reveal reveal-delay-1 feature-card" data-feature="1">
-                        <div class="flex items-start gap-4">
-                            <span class="feature-number font-mono text-sm font-medium mt-0.5">02</span>
-                            <div class="flex-1">
-                                <h3 class="font-sans text-lg font-semibold text-obsidian mb-1">Private Database</h3>
-                                <p class="font-sans text-sm text-subtle leading-relaxed">
-                                    Every app connected to PopDB gets a dedicated database, private and fully under your control. No config strings.
-                                </p>
+                        <div class="flex items-center gap-6">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-start gap-4">
+                                    <span class="feature-number font-mono text-sm font-medium mt-0.5">02</span>
+                                    <div>
+                                        <h3 class="font-sans text-lg font-semibold text-obsidian mb-1">Private Database</h3>
+                                        <p class="font-sans text-sm text-subtle leading-relaxed">
+                                            Every app connected to PopDB gets a dedicated database, private and fully under your control. No config strings.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="feature-image-wrap mt-4">
-                            <div class="feature-image-inner">
-                                <div class="h-48 bg-canvas rounded-2xl border border-border/50 flex items-center justify-center relative overflow-hidden">
-                                    <div class="absolute inset-0 bg-[radial-gradient(#00000008_1px,transparent_1px)] [background-size:12px_12px]"></div>
-                                    <div class="relative flex flex-col items-center gap-2 text-border">
-                                        <iconify-icon icon="solar:database-linear" width="32" stroke-width="1"></iconify-icon>
-                                        <span class="text-[10px] font-mono uppercase tracking-wider">Database Dashboard</span>
+                            <div class="feature-image-wrap">
+                                <div class="feature-image-inner">
+                                    <div class="w-44 h-44 shrink-0 bg-canvas rounded-2xl border border-border/50 flex items-center justify-center relative overflow-hidden">
+                                        <div class="absolute inset-0 bg-[radial-gradient(#00000008_1px,transparent_1px)] [background-size:12px_12px]"></div>
+                                        <div class="relative flex flex-col items-center gap-2 text-border">
+                                            <iconify-icon icon="solar:database-linear" width="32" stroke-width="1"></iconify-icon>
+                                            <span class="text-[10px] font-mono uppercase tracking-wider">Database Dashboard</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -490,23 +465,27 @@
                     </div>
 
                     <!-- Card 3: Managed Hosting -->
-                    <div class="reveal reveal-delay-2 feature-card md:col-span-2" data-feature="2">
-                        <div class="flex items-start gap-4">
-                            <span class="feature-number font-mono text-sm font-medium mt-0.5">03</span>
-                            <div class="flex-1">
-                                <h3 class="font-sans text-lg font-semibold text-obsidian mb-1">Managed Hosting</h3>
-                                <p class="font-sans text-sm text-subtle leading-relaxed">
-                                    PopDB handles hosting so your app is easy to deploy, reliable, and secure without maintenance or SSH keys.
-                                </p>
+                    <div class="reveal reveal-delay-2 feature-card" data-feature="2">
+                        <div class="flex items-center gap-6">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-start gap-4">
+                                    <span class="feature-number font-mono text-sm font-medium mt-0.5">03</span>
+                                    <div>
+                                        <h3 class="font-sans text-lg font-semibold text-obsidian mb-1">Managed Hosting</h3>
+                                        <p class="font-sans text-sm text-subtle leading-relaxed">
+                                            PopDB handles hosting so your app is easy to deploy, reliable, and secure without maintenance or SSH keys.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="feature-image-wrap mt-4">
-                            <div class="feature-image-inner">
-                                <div class="h-48 bg-canvas rounded-2xl border border-border/50 flex items-center justify-center relative overflow-hidden">
-                                    <div class="absolute inset-0 bg-[radial-gradient(#00000008_1px,transparent_1px)] [background-size:12px_12px]"></div>
-                                    <div class="relative flex flex-col items-center gap-2 text-border">
-                                        <iconify-icon icon="solar:server-square-linear" width="32" stroke-width="1"></iconify-icon>
-                                        <span class="text-[10px] font-mono uppercase tracking-wider">Hosting Panel</span>
+                            <div class="feature-image-wrap">
+                                <div class="feature-image-inner">
+                                    <div class="w-44 h-44 shrink-0 bg-canvas rounded-2xl border border-border/50 flex items-center justify-center relative overflow-hidden">
+                                        <div class="absolute inset-0 bg-[radial-gradient(#00000008_1px,transparent_1px)] [background-size:12px_12px]"></div>
+                                        <div class="relative flex flex-col items-center gap-2 text-border">
+                                            <iconify-icon icon="solar:server-square-linear" width="32" stroke-width="1"></iconify-icon>
+                                            <span class="text-[10px] font-mono uppercase tracking-wider">Hosting Panel</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

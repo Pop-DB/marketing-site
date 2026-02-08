@@ -461,6 +461,13 @@
         .demo-tab[data-tab] {
             cursor: pointer;
         }
+        .demo-tab iconify-icon[icon="lucide:x"] {
+            color: #4A4A4A;
+            transition: color 0.15s;
+        }
+        .demo-tab.active iconify-icon[icon="lucide:x"] {
+            color: #9CA3AF;
+        }
         .demo-setup-btns {
             display: flex;
             gap: 8px;
@@ -738,10 +745,13 @@
             pointer-events: none;
         }
         .desktop-reset-btn {
-            width: 24px;
-            height: 24px;
+            position: absolute;
+            top: 10px;
+            right: 14px;
+            width: 28px;
+            height: 28px;
             border-radius: 6px;
-            background: transparent;
+            background: rgba(255,255,255,0.08);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -749,32 +759,14 @@
             opacity: 0;
             transition: opacity 0.3s, background 0.2s;
             pointer-events: none;
+            z-index: 20;
         }
         .desktop-reset-btn.visible {
             opacity: 1;
             pointer-events: auto;
         }
         .desktop-reset-btn:hover {
-            background: rgba(0,0,0,0.08);
-        }
-        .desktop-clock {
-            position: absolute;
-            top: 12px;
-            right: 16px;
-            font-family: 'SF Mono', 'Fira Code', monospace;
-            font-size: 12px;
-            color: rgba(255,255,255,0.5);
-            z-index: 5;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .desktop-clock-label {
-            font-family: 'Inter', sans-serif;
-            font-size: 11px;
-            font-weight: 600;
-            color: rgba(255,255,255,0.35);
-            letter-spacing: 0.5px;
+            background: rgba(255,255,255,0.15);
         }
         #hero-window {
             position: absolute;
@@ -803,7 +795,6 @@
         @media (max-width: 767px) {
             #hero-desktop { height: 460px; }
             #hero-window { width: 95%; }
-            .desktop-clock { display: none; }
         }
 
         /* ===== Security: Lock → Close → Pulse → GIF ===== */
@@ -876,13 +867,6 @@
         <section class="relative min-h-[90vh] flex flex-col items-center justify-center pt-32 pb-20 px-6 md:px-12">
             <div class="max-w-3xl text-center space-y-8 relative z-10">
 
-                <!-- Badge -->
-                <div class="reveal inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-border shadow-sm mx-auto">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span class="font-sans text-[10px] font-medium text-subtle tracking-tight uppercase">
-                        Zero Config Required
-                    </span>
-                </div>
 
                 <!-- Headline -->
                 <h1 class="reveal reveal-delay-1 font-sans text-3xl sm:text-5xl md:text-7xl font-semibold tracking-tighter text-obsidian leading-[1.05]">
@@ -912,10 +896,9 @@
             <!-- Hero Visual: Desktop with Draggable Window -->
             <div class="reveal reveal-delay-4 mt-12 sm:mt-16 md:mt-20 w-full max-w-5xl mx-auto">
                 <div id="hero-desktop">
-                    <!-- Desktop Clock -->
-                    <div class="desktop-clock">
-                        <span class="desktop-clock-label">PopDB OS</span>
-                        <span id="desktop-time"></span>
+                    <!-- Desktop Reset Button -->
+                    <div id="desktop-reset" class="desktop-reset-btn" title="Re-center window">
+                        <iconify-icon icon="lucide:refresh-cw" width="14" style="color:rgba(255,255,255,0.5)"></iconify-icon>
                     </div>
 
                     <!-- Draggable Window -->
@@ -930,9 +913,6 @@
                             <div class="flex-1 flex items-center justify-center gap-1.5">
                                 <iconify-icon icon="solar:lock-keyhole-minimalistic-linear" width="10" class="text-gray-400"></iconify-icon>
                                 <span class="text-[10px] font-mono text-gray-400">my-awesome-idea.popdb.app</span>
-                            </div>
-                            <div id="desktop-reset" class="desktop-reset-btn" title="Re-center window">
-                                <iconify-icon icon="lucide:refresh-cw" width="14" style="color:#9CA3AF"></iconify-icon>
                             </div>
                         </div>
 
@@ -1037,15 +1017,15 @@
                             <div id="demo-tab-bar" class="demo-tab-bar">
                                 <div class="demo-tab active" data-tab="schema">
                                     Database Schema
-                                    <iconify-icon icon="lucide:x" width="14" style="color:#EF4444"></iconify-icon>
+                                    <iconify-icon icon="lucide:x" width="12"></iconify-icon>
                                 </div>
                                 <div class="demo-tab" data-tab="integrations">
                                     Integrations
-                                    <iconify-icon icon="lucide:x" width="12" style="color:#7A7A7A"></iconify-icon>
+                                    <iconify-icon icon="lucide:x" width="12"></iconify-icon>
                                 </div>
                                 <div class="demo-tab" data-tab="teammates">
                                     AI Teammates
-                                    <iconify-icon icon="lucide:x" width="12" style="color:#7A7A7A"></iconify-icon>
+                                    <iconify-icon icon="lucide:x" width="12"></iconify-icon>
                                 </div>
                                 <div class="demo-tab" style="padding:7px 10px">
                                     <iconify-icon icon="lucide:plus" width="14" style="color:#6B7280"></iconify-icon>
@@ -1156,10 +1136,11 @@
 
                 <div class="mb-16 max-w-2xl">
                     <h2 class="reveal font-sans text-2xl sm:text-3xl md:text-4xl font-semibold text-obsidian tracking-tight mb-4">
-                        PopDB acts like your System Admin.
+                        Everything you need. Nothing you don't.
                     </h2>
                     <p class="reveal reveal-delay-1 text-subtle text-lg">
-                        World class features out of the box, so you can focus on the vibe, not the infrastructure.
+                        PopDB handles the parts of building a business that usually require specialists.<br>
+                        You focus on the product. The platform takes care of the rest.
                     </p>
                 </div>
 
@@ -2056,16 +2037,6 @@
                 demoObserver.observe(demoChat);
             }
 
-            // Desktop Clock
-            const desktopTime = document.getElementById('desktop-time');
-            if (desktopTime) {
-                function updateClock() {
-                    const now = new Date();
-                    desktopTime.textContent = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-                }
-                updateClock();
-                setInterval(updateClock, 30000);
-            }
 
             // Draggable Window
             const heroWindow = document.getElementById('hero-window');

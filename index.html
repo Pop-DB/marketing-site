@@ -306,6 +306,46 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            transition: width 0.3s ease, min-width 0.3s ease;
+        }
+        #demo-sidebar.collapsed {
+            width: 44px;
+            min-width: 44px;
+        }
+        #demo-sidebar.collapsed .demo-sidebar-content {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .demo-sidebar-toggle {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            cursor: pointer;
+            background: transparent;
+            transition: background 0.2s;
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+        .demo-sidebar-toggle:hover {
+            background: #1F1F1F;
+        }
+        #demo-sidebar.collapsed .demo-topbar {
+            justify-content: center;
+            padding: 10px 8px;
+        }
+        #demo-sidebar.collapsed .demo-topbar > *:not(.demo-sidebar-toggle) {
+            display: none;
+        }
+        #demo-sidebar.collapsed .demo-sidebar-toggle {
+            margin-left: 0;
+        }
+        .demo-sidebar-content {
+            flex: 1;
+            overflow: hidden;
+            transition: opacity 0.2s ease;
         }
         .demo-topbar {
             display: flex;
@@ -443,6 +483,41 @@
         .demo-setup-btn:hover {
             border-color: #10B981;
             color: #FFFFFF;
+        }
+        .demo-setup-btn.selected {
+            border-color: #10B981;
+            background: rgba(16, 185, 129, 0.1);
+            color: #FFFFFF;
+        }
+        .demo-connect-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 10px 20px;
+            background: #2A2A2A;
+            border: 1px solid #3A3A3A;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #6B7280;
+            cursor: not-allowed;
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity 0.3s, transform 0.3s, background 0.2s, border-color 0.2s, color 0.2s;
+        }
+        .demo-connect-btn.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .demo-connect-btn.enabled {
+            background: linear-gradient(135deg, #10B981, #34D399);
+            border-color: transparent;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+        .demo-connect-btn.enabled:hover {
+            filter: brightness(1.1);
         }
         #demo-chat {
             flex: 1;
@@ -644,6 +719,7 @@
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
             border-radius: 16px;
             overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15), 0 10px 20px rgba(0,0,0,0.1);
         }
         #hero-desktop::before {
             content: '';
@@ -660,6 +736,26 @@
             inset: 0;
             background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='1' cy='1' r='0.5' fill='rgba(255,255,255,0.03)'/%3E%3C/svg%3E");
             pointer-events: none;
+        }
+        .desktop-reset-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s, background 0.2s;
+            pointer-events: none;
+        }
+        .desktop-reset-btn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .desktop-reset-btn:hover {
+            background: rgba(0,0,0,0.08);
         }
         .desktop-clock {
             position: absolute;
@@ -679,32 +775,6 @@
             font-weight: 600;
             color: rgba(255,255,255,0.35);
             letter-spacing: 0.5px;
-        }
-        .desktop-dock {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-            padding: 6px 14px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 12px;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.06);
-            z-index: 5;
-        }
-        .dock-icon {
-            width: 28px;
-            height: 28px;
-            border-radius: 7px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s;
-        }
-        .dock-icon:hover {
-            transform: scale(1.2) translateY(-3px);
         }
         #hero-window {
             position: absolute;
@@ -733,7 +803,6 @@
         @media (max-width: 767px) {
             #hero-desktop { height: 460px; }
             #hero-window { width: 95%; }
-            .desktop-dock { display: none; }
             .desktop-clock { display: none; }
         }
 
@@ -852,19 +921,19 @@
                     <!-- Draggable Window -->
                     <div id="hero-window">
                         <!-- Browser Chrome (Drag Handle) -->
-                        <div class="demo-drag-handle flex items-center gap-2 px-4 py-3 border-b border-gray-200 bg-gray-50 rounded-t-xl">
+                        <div class="demo-drag-handle flex items-center gap-2 px-3 py-1.5 border-b border-gray-200 bg-gray-50 rounded-t-xl">
                             <div class="flex gap-1.5">
                                 <div class="w-2.5 h-2.5 rounded-full bg-red-400/80"></div>
                                 <div class="w-2.5 h-2.5 rounded-full bg-yellow-400/80"></div>
                                 <div class="w-2.5 h-2.5 rounded-full bg-green-400/80"></div>
                             </div>
-                            <div class="flex-1 text-center">
-                                <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-gray-200 rounded-md shadow-sm">
-                                    <iconify-icon icon="solar:lock-keyhole-minimalistic-linear" width="10" class="text-gray-400"></iconify-icon>
-                                    <span class="text-[10px] font-mono text-gray-400">my-awesome-idea.popdb.app</span>
-                                </div>
+                            <div class="flex-1 flex items-center justify-center gap-1.5">
+                                <iconify-icon icon="solar:lock-keyhole-minimalistic-linear" width="10" class="text-gray-400"></iconify-icon>
+                                <span class="text-[10px] font-mono text-gray-400">my-awesome-idea.popdb.app</span>
                             </div>
-                            <div class="w-10"></div>
+                            <div id="desktop-reset" class="desktop-reset-btn" title="Re-center window">
+                                <iconify-icon icon="lucide:refresh-cw" width="14" style="color:#9CA3AF"></iconify-icon>
+                            </div>
                         </div>
 
                     <!-- Interactive Demo UI -->
@@ -876,7 +945,11 @@
                                 <div class="demo-app-icon"></div>
                                 <span class="demo-app-name">Vibe Coder Project</span>
                                 <iconify-icon icon="lucide:chevron-down" width="14" style="color:#6B7280"></iconify-icon>
+                                <div id="demo-sidebar-toggle" class="demo-sidebar-toggle" title="Toggle sidebar">
+                                    <iconify-icon icon="lucide:panel-left-close" width="16" style="color:#6B7280"></iconify-icon>
+                                </div>
                             </div>
+                            <div class="demo-sidebar-content">
                             <!-- Sidebar Tabs -->
                             <div class="demo-sidebar-tabs">
                                 <div class="demo-sidebar-tab active">
@@ -956,6 +1029,7 @@
                                     <span class="demo-file-name">PostgreSQL</span>
                                 </div>
                             </div>
+                            </div><!-- /demo-sidebar-content -->
                         </div>
                         <!-- Content Area -->
                         <div id="demo-content">
@@ -969,8 +1043,8 @@
                                     Integrations
                                     <iconify-icon icon="lucide:x" width="12" style="color:#7A7A7A"></iconify-icon>
                                 </div>
-                                <div class="demo-tab">
-                                    User Stories
+                                <div class="demo-tab" data-tab="teammates">
+                                    AI Teammates
                                     <iconify-icon icon="lucide:x" width="12" style="color:#7A7A7A"></iconify-icon>
                                 </div>
                                 <div class="demo-tab" style="padding:7px 10px">
@@ -991,20 +1065,6 @@
                     </div><!-- /hero-window -->
 
                     <!-- Desktop Dock -->
-                    <div class="desktop-dock">
-                        <div class="dock-icon" style="background:linear-gradient(135deg,#6366F1,#8B5CF6)">
-                            <iconify-icon icon="lucide:terminal" width="16" style="color:#fff"></iconify-icon>
-                        </div>
-                        <div class="dock-icon" style="background:linear-gradient(135deg,#10B981,#34D399)">
-                            <iconify-icon icon="lucide:database" width="16" style="color:#fff"></iconify-icon>
-                        </div>
-                        <div class="dock-icon" style="background:linear-gradient(135deg,#F59E0B,#FBBF24)">
-                            <iconify-icon icon="lucide:folder" width="16" style="color:#fff"></iconify-icon>
-                        </div>
-                        <div class="dock-icon" style="background:linear-gradient(135deg,#EF4444,#F87171)">
-                            <iconify-icon icon="lucide:globe" width="16" style="color:#fff"></iconify-icon>
-                        </div>
-                    </div>
                 </div><!-- /hero-desktop -->
             </div>
         </section>
@@ -1727,7 +1787,7 @@
                         { type: 'ai', parts: [
                             { kind: 'text', text: "Of course! I just added a reviews section. Users can rate any recipe from 1 to 5 stars and leave a comment." },
                             { kind: 'collapsible_code', label: 'View code', text: "CREATE TABLE reviews (\n  id UUID PRIMARY KEY,\n  recipe_id UUID REFERENCES recipes(id),\n  user_id UUID REFERENCES users(id),\n  rating INTEGER CHECK (rating BETWEEN 1 AND 5),\n  comment TEXT,\n  created_at TIMESTAMP DEFAULT NOW()\n);" },
-                            { kind: 'text', text: 'Your app is ready with recipes and reviews.' },
+                            { kind: 'text', text: 'Your database has been created successfully! It includes tables for recipes and reviews, all linked together and ready to go.' },
                             { kind: 'deploy', text: 'Would you like me to deploy this now?' },
                             { kind: 'button', text: 'Deploy' },
                         ]},
@@ -1737,10 +1797,26 @@
                         { type: 'ai', parts: [
                             { kind: 'text', text: "Easy! I can set up both for you right now. Just pick the ones you want to enable:" },
                             { kind: 'setup_btns', buttons: [
-                                { icon: 'lucide:mail', label: 'Set up Email' },
-                                { icon: 'lucide:smartphone', label: 'Set up SMS' },
+                                { icon: 'lucide:mail', label: 'Email' },
+                                { icon: 'lucide:smartphone', label: 'SMS' },
                             ]},
                         ]},
+                        { type: 'interactive_connect' },
+                        { type: 'ai_connect_response' },
+                    ],
+                    teammates: [
+                        { type: 'user', text: 'I want to add AI teammates to help run my app.' },
+                        { type: 'ai', parts: [
+                            { kind: 'text', text: "Great idea! Pick which AI teammates you'd like to create:" },
+                            { kind: 'setup_btns', buttons: [
+                                { icon: 'lucide:megaphone', label: 'Marketing' },
+                                { icon: 'lucide:badge-dollar-sign', label: 'Sales' },
+                                { icon: 'lucide:calculator', label: 'Finance' },
+                                { icon: 'lucide:headset', label: 'Support' },
+                            ]},
+                        ]},
+                        { type: 'interactive_connect' },
+                        { type: 'ai_connect_response' },
                     ],
                 };
 
@@ -1858,13 +1934,50 @@
                             await sleep(300);
                             const wrapper = document.createElement('div');
                             wrapper.className = 'demo-setup-btns';
+                            const selected = new Set();
                             for (const b of part.buttons) {
                                 const el = document.createElement('div');
                                 el.className = 'demo-setup-btn';
                                 el.innerHTML = '<iconify-icon icon="' + b.icon + '" width="16"></iconify-icon>' + b.label;
+                                el.addEventListener('click', () => {
+                                    el.classList.toggle('selected');
+                                    if (selected.has(b.label)) { selected.delete(b.label); } else { selected.add(b.label); }
+                                    connectBtn.classList.toggle('enabled', selected.size > 0);
+                                });
                                 wrapper.appendChild(el);
                             }
                             msg.appendChild(wrapper);
+
+                            const isTeammates = activeTab === 'teammates';
+                            const connectBtn = document.createElement('div');
+                            connectBtn.className = 'demo-connect-btn';
+                            connectBtn.innerHTML = isTeammates
+                                ? '<iconify-icon icon="lucide:bot" width="16"></iconify-icon>Create'
+                                : '<iconify-icon icon="lucide:plug" width="16"></iconify-icon>Connect';
+                            msg.appendChild(connectBtn);
+                            requestAnimationFrame(() => requestAnimationFrame(() => connectBtn.classList.add('visible')));
+
+                            const tabAtClick = activeTab;
+                            connectBtn.addEventListener('click', async () => {
+                                if (selected.size === 0 || animating) return;
+                                animating = true;
+                                const names = Array.from(selected);
+                                const label = names.join(' and ');
+                                let confirmText;
+                                if (tabAtClick === 'teammates') {
+                                    await addUserMsg('Create ' + label);
+                                    stepIndex++;
+                                    confirmText = 'Done! Your ' + label + ' AI teammate' + (names.length > 1 ? 's have' : ' has') + ' been created successfully and ' + (names.length > 1 ? 'are' : 'is') + ' ready to go. They will start handling tasks for your app right away.';
+                                } else {
+                                    await addUserMsg('Connect ' + label);
+                                    stepIndex++;
+                                    confirmText = 'Done! ' + label + (names.length > 1 ? ' are' : ' is') + ' now connected to your staging app and ready to go. Staging users will start receiving notifications right away.';
+                                }
+                                await addAiMsg([{ kind: 'text', text: confirmText }]);
+                                stepIndex++;
+                                animating = false;
+                                stageNextUserMsg();
+                            });
                             scrollChat();
                         }
                     }
@@ -1880,8 +1993,11 @@
                         return;
                     }
 
-                    animating = true;
                     const step = activeScript[stepIndex];
+                    // interactive_connect steps are handled by the connect button, not send
+                    if (step.type === 'interactive_connect' || step.type === 'ai_connect_response') return;
+
+                    animating = true;
 
                     if (step.type === 'user') {
                         await addUserMsg(step.text);
@@ -1897,6 +2013,17 @@
                 }
 
                 demoSend.addEventListener('click', handleSend);
+
+                // Sidebar toggle
+                const sidebarToggle = document.getElementById('demo-sidebar-toggle');
+                const demoSidebar = document.getElementById('demo-sidebar');
+                if (sidebarToggle && demoSidebar) {
+                    sidebarToggle.addEventListener('click', () => {
+                        demoSidebar.classList.toggle('collapsed');
+                        const icon = sidebarToggle.querySelector('iconify-icon');
+                        icon.setAttribute('icon', demoSidebar.classList.contains('collapsed') ? 'lucide:panel-left-open' : 'lucide:panel-left-close');
+                    });
+                }
 
                 // Tab switching
                 demoTabBar.addEventListener('click', (e) => {
@@ -1969,10 +2096,13 @@
                     heroWindow.style.top = (startTop + dy) + 'px';
                 }
 
+                const resetBtn = document.getElementById('desktop-reset');
+
                 function endDrag() {
                     if (!isDragging) return;
                     isDragging = false;
                     heroWindow.classList.remove('dragging');
+                    resetBtn.classList.add('visible');
                 }
 
                 // Mouse events
@@ -1997,6 +2127,15 @@
                     e.preventDefault();
                 }, { passive: false });
                 document.addEventListener('touchend', endDrag);
+
+                // Reset button — click to re-center window
+                resetBtn.addEventListener('click', () => {
+                    heroWindow.style.transition = 'left 0.4s ease, top 0.4s ease';
+                    heroWindow.style.left = '50%';
+                    heroWindow.style.top = '50%';
+                    heroWindow.style.transform = 'translate(-50%, -50%)';
+                    setTimeout(() => { heroWindow.style.transition = ''; }, 400);
+                });
             }
 
             // Scroll Reveal via Intersection Observer

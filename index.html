@@ -354,12 +354,6 @@
             padding: 10px 12px;
             border-bottom: 1px solid #1F1F1F;
         }
-        .demo-app-icon {
-            width: 22px;
-            height: 22px;
-            border-radius: 5px;
-            background: linear-gradient(135deg, #10B981, #34D399);
-        }
         .demo-app-name {
             font-size: 13px;
             font-weight: 700;
@@ -440,6 +434,7 @@
             background: #0D0D0D;
             border-bottom: 1px solid #1F1F1F;
             height: 44px;
+            overflow: hidden;
         }
         .demo-tab {
             display: flex;
@@ -450,6 +445,14 @@
             font-size: 12px;
             color: #8A8A8A;
             background: #1A1A1A;
+            white-space: nowrap;
+            overflow: hidden;
+            min-width: 0;
+            flex-shrink: 1;
+            transition: flex 0.2s ease;
+        }
+        .demo-tab iconify-icon[icon="lucide:x"]:hover {
+            color: #FFFFFF !important;
         }
         .demo-tab.active {
             background: linear-gradient(180deg, #2A2A2A, #1F1F1F);
@@ -538,6 +541,121 @@
         #demo-chat::-webkit-scrollbar {
             display: none;
         }
+        #demo-app-preview {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            overflow-y: auto;
+            background: #FFF9F2;
+            scrollbar-width: none;
+        }
+        #demo-app-preview::-webkit-scrollbar {
+            display: none;
+        }
+        .preview-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px;
+            border-bottom: 1px solid #E8DDD0;
+            background: rgba(255,249,242,0.95);
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+        .preview-logo {
+            font-family: 'Georgia', serif;
+            font-weight: 700;
+            font-size: 14px;
+            color: #2D2D2D;
+        }
+        .preview-live {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 10px;
+            background: #ECFDF5;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            color: #10B981;
+            letter-spacing: 0.5px;
+        }
+        .preview-live-dot {
+            width: 6px;
+            height: 6px;
+            background: #10B981;
+            border-radius: 50%;
+            animation: pulse-dot 2s infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .preview-hero {
+            padding: 20px 16px 12px;
+            text-align: center;
+        }
+        .preview-hero h2 {
+            font-family: 'Georgia', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #2D2D2D;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+        .preview-hero p {
+            font-size: 10px;
+            color: #6B6B6B;
+        }
+        .preview-search {
+            margin: 8px 16px 16px;
+            padding: 8px 12px;
+            background: #FFFFFF;
+            border: 1px solid #E8DDD0;
+            border-radius: 20px;
+            font-size: 10px;
+            color: #A0A0A0;
+        }
+        .preview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 0 16px 20px;
+        }
+        .preview-card {
+            background: #FFFFFF;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #E8DDD0;
+        }
+        .preview-card img {
+            width: 100%;
+            height: 72px;
+            object-fit: cover;
+            display: block;
+        }
+        .preview-card-body {
+            padding: 8px 10px;
+        }
+        .preview-card-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #2D2D2D;
+            margin-bottom: 3px;
+            line-height: 1.3;
+        }
+        .preview-card-meta {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 9px;
+            color: #6B6B6B;
+        }
+        .preview-card-stars {
+            color: #F59E0B;
+            font-size: 9px;
+        }
         .demo-msg {
             opacity: 0;
             transform: translateY(8px);
@@ -620,18 +738,20 @@
         .demo-deploy-btn {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             margin-top: 12px;
-            padding: 10px 20px;
-            background: linear-gradient(135deg, #10B981, #34D399);
+            padding: 8px 18px;
+            background: #FFFFFF;
+            border: 1px solid rgba(255,255,255,0.2);
             border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #FFFFFF;
-            letter-spacing: 0.3px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #171717;
+            font-family: 'Inter', system-ui, sans-serif;
+            letter-spacing: 0;
             opacity: 0;
             transform: translateY(6px) scale(0.95);
-            transition: opacity 0.4s, transform 0.4s;
+            transition: opacity 0.4s, transform 0.4s, background 0.2s;
             cursor: pointer;
         }
         .demo-deploy-btn.visible {
@@ -639,7 +759,7 @@
             transform: translateY(0) scale(1);
         }
         .demo-deploy-btn:hover {
-            filter: brightness(1.1);
+            background: #F0F0F0;
         }
         .demo-chat-bar {
             display: flex;
@@ -826,6 +946,27 @@
             transform: scale(1);
             pointer-events: auto;
         }
+
+        /* FAQ Accordion */
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+            padding-top: 0;
+        }
+        .faq-item.faq-open .faq-answer {
+            max-height: 200px;
+            opacity: 1;
+            padding-top: 12px;
+        }
+        .faq-chevron {
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+        .faq-item.faq-open .faq-chevron {
+            transform: rotate(180deg);
+        }
     </style>
 </head>
 
@@ -876,7 +1017,7 @@
 
                 <!-- Subtext -->
                 <p class="reveal reveal-delay-2 max-w-xl mx-auto font-sans text-sm sm:text-base md:text-lg text-subtle leading-relaxed">
-                    Build and deploy unlimited apps and AI agents with database, hosting, auth, storage, and a simple command-line interface — all for one predictable monthly price.
+                    Everything you need to build and deploy apps. Database, hosting, auth, storage, and a simple CLI with one predictable monthly cost.
                 </p>
 
                 <!-- CTA -->
@@ -886,9 +1027,6 @@
                             <span class="text-sm font-medium">Create your first App</span>
                             <iconify-icon icon="solar:arrow-right-linear" width="16" stroke-width="1.5" class="group-hover:translate-x-1 transition-transform"></iconify-icon>
                         </div>
-                    </button>
-                    <button class="px-6 py-2.5 md:px-8 md:py-3 bg-white text-obsidian border border-border rounded-xl shadow-sm hover:border-obsidian/30 hover:bg-gray-50 transition-all duration-300 w-full md:w-auto">
-                        <span class="text-sm font-medium">View Examples</span>
                     </button>
                 </div>
             </div>
@@ -922,7 +1060,6 @@
                         <div id="demo-sidebar">
                             <!-- Top Bar -->
                             <div class="demo-topbar">
-                                <div class="demo-app-icon"></div>
                                 <span class="demo-app-name">Vibe Coder Project</span>
                                 <iconify-icon icon="lucide:chevron-down" width="14" style="color:#6B7280"></iconify-icon>
                                 <div id="demo-sidebar-toggle" class="demo-sidebar-toggle" title="Toggle sidebar">
@@ -1033,6 +1170,60 @@
                             </div>
                             <!-- Chat Area -->
                             <div id="demo-chat"></div>
+                            <!-- Deployed App Preview (hidden until deploy) -->
+                            <div id="demo-app-preview">
+                                <div class="preview-nav">
+                                    <span class="preview-logo">RecipeBox</span>
+                                    <span class="preview-live"><span class="preview-live-dot"></span>LIVE</span>
+                                </div>
+                                <div class="preview-hero">
+                                    <h2>Discover & Share<br>Delicious Recipes</h2>
+                                    <p>Browse community recipes and share your own creations.</p>
+                                </div>
+                                <div class="preview-search">Search recipes, ingredients...</div>
+                                <div class="preview-grid">
+                                    <div class="preview-card">
+                                        <img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=300&h=200&fit=crop" alt="Pasta">
+                                        <div class="preview-card-body">
+                                            <div class="preview-card-title">Creamy Tuscan Pasta</div>
+                                            <div class="preview-card-meta">
+                                                <span class="preview-card-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                                                <span>25 min</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="preview-card">
+                                        <img src="https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=300&h=200&fit=crop" alt="Curry">
+                                        <div class="preview-card-body">
+                                            <div class="preview-card-title">Thai Green Curry</div>
+                                            <div class="preview-card-meta">
+                                                <span class="preview-card-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+                                                <span>35 min</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="preview-card">
+                                        <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=300&h=200&fit=crop" alt="Pizza">
+                                        <div class="preview-card-body">
+                                            <div class="preview-card-title">Margherita Pizza</div>
+                                            <div class="preview-card-meta">
+                                                <span class="preview-card-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                                                <span>45 min</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="preview-card">
+                                        <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=300&h=200&fit=crop" alt="Salmon">
+                                        <div class="preview-card-body">
+                                            <div class="preview-card-title">Honey Garlic Salmon</div>
+                                            <div class="preview-card-meta">
+                                                <span class="preview-card-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+                                                <span>30 min</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <!-- Chat Input Bar -->
                             <div class="demo-chat-bar">
                                 <div id="demo-input" class="demo-chat-input">Ask a question...</div>
@@ -1179,8 +1370,7 @@
                                             <!-- Label -->
                                             <p class="text-xs md:text-sm font-sans text-obsidian/70 text-center mb-4">Ready to Deploy?</p>
                                             <!-- Deploy Button -->
-                                            <button id="deploy-btn" class="deploy-btn-pulse w-full py-2 bg-obsidian text-white text-xs font-mono font-medium rounded-lg hover:bg-obsidian/90 active:scale-95 transition-all cursor-pointer flex items-center justify-center gap-1.5">
-                                                <iconify-icon icon="solar:rocket-2-linear" width="14" style="color: white;"></iconify-icon>
+                                            <button id="deploy-btn" class="deploy-btn-pulse w-full py-2 bg-obsidian text-white text-xs font-mono font-medium rounded-lg hover:bg-obsidian/90 active:scale-95 transition-all cursor-pointer flex items-center justify-center">
                                                 Deploy
                                             </button>
                                         </div>
@@ -1640,6 +1830,90 @@
             </div>
         </section>
 
+        <!-- FAQ Section -->
+        <section id="faq" class="py-16 sm:py-24 md:py-32 px-6 md:px-12 bg-canvas">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-start">
+
+                    <!-- Left Column -->
+                    <div class="md:sticky md:top-32 space-y-6">
+                        <h2 class="reveal font-sans text-2xl sm:text-3xl md:text-4xl font-semibold text-obsidian tracking-tight">
+                            Your questions, answered
+                        </h2>
+                        <p class="reveal reveal-delay-1 text-subtle text-lg">
+                            Get quick answers about our platform and how it works.
+                        </p>
+                        <div class="reveal reveal-delay-2">
+                            <a href="#contact" class="inline-flex items-center gap-2 border border-obsidian text-obsidian rounded-full px-6 py-2.5 text-sm font-medium hover:bg-obsidian hover:text-white transition-all duration-300">
+                                Contact us
+                                <iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Accordion -->
+                    <div class="reveal reveal-delay-1 bg-white border border-border rounded-2xl p-4 md:p-6 space-y-3">
+
+                        <!-- FAQ Item 1 -->
+                        <div class="faq-item bg-canvas rounded-xl p-5 cursor-pointer transition-all">
+                            <div class="flex items-center justify-between gap-4">
+                                <h3 class="text-base font-medium text-obsidian">What is PopDB?</h3>
+                                <iconify-icon icon="solar:alt-arrow-down-linear" width="20" class="faq-chevron text-subtle"></iconify-icon>
+                            </div>
+                            <div class="faq-answer">
+                                <p class="text-sm text-subtle leading-relaxed">PopDB is an all-in-one backend platform that gives you a database, hosting, auth, storage, and a CLI — everything you need to build and deploy apps without stitching together multiple services.</p>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 2 -->
+                        <div class="faq-item bg-canvas rounded-xl p-5 cursor-pointer transition-all">
+                            <div class="flex items-center justify-between gap-4">
+                                <h3 class="text-base font-medium text-obsidian">How does pricing work?</h3>
+                                <iconify-icon icon="solar:alt-arrow-down-linear" width="20" class="faq-chevron text-subtle"></iconify-icon>
+                            </div>
+                            <div class="faq-answer">
+                                <p class="text-sm text-subtle leading-relaxed">PopDB has one simple monthly price that covers unlimited apps and agents. No per-request fees, no surprise bills. You get predictable costs so you can focus on building.</p>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 3 -->
+                        <div class="faq-item bg-canvas rounded-xl p-5 cursor-pointer transition-all">
+                            <div class="flex items-center justify-between gap-4">
+                                <h3 class="text-base font-medium text-obsidian">Do I need DevOps experience?</h3>
+                                <iconify-icon icon="solar:alt-arrow-down-linear" width="20" class="faq-chevron text-subtle"></iconify-icon>
+                            </div>
+                            <div class="faq-answer">
+                                <p class="text-sm text-subtle leading-relaxed">Not at all. PopDB is built for developers and vibe coders alike. Our CLI handles deployments, and the dashboard gives you full visibility — no infrastructure expertise needed.</p>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 4 -->
+                        <div class="faq-item bg-canvas rounded-xl p-5 cursor-pointer transition-all">
+                            <div class="flex items-center justify-between gap-4">
+                                <h3 class="text-base font-medium text-obsidian">Can I migrate my existing app to PopDB?</h3>
+                                <iconify-icon icon="solar:alt-arrow-down-linear" width="20" class="faq-chevron text-subtle"></iconify-icon>
+                            </div>
+                            <div class="faq-answer">
+                                <p class="text-sm text-subtle leading-relaxed">Yes. PopDB supports standard PostgreSQL databases, so you can import your existing data. Our CLI tools make migration straightforward.</p>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 5 -->
+                        <div class="faq-item bg-canvas rounded-xl p-5 cursor-pointer transition-all">
+                            <div class="flex items-center justify-between gap-4">
+                                <h3 class="text-base font-medium text-obsidian">What kind of support do you offer?</h3>
+                                <iconify-icon icon="solar:alt-arrow-down-linear" width="20" class="faq-chevron text-subtle"></iconify-icon>
+                            </div>
+                            <div class="faq-answer">
+                                <p class="text-sm text-subtle leading-relaxed">We offer documentation, community support, and direct assistance. Whether you're stuck on setup or scaling, we're here to help.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Simple Pricing -->
         <section id="pricing" class="py-12 sm:py-16 md:py-24 px-6 md:px-12 bg-canvas">
             <div class="max-w-5xl mx-auto">
@@ -1843,6 +2117,101 @@
                     }
                 }
 
+                function seedFirstMessages() {
+                    if (activeScript.length < 2) return;
+                    const userStep = activeScript[0];
+                    const aiStep = activeScript[1];
+
+                    // Render first user message instantly
+                    const userMsg = document.createElement('div');
+                    userMsg.className = 'demo-msg visible';
+                    userMsg.innerHTML = '<div class="demo-msg-user"><p></p></div>';
+                    userMsg.querySelector('p').textContent = userStep.text;
+                    demoChat.appendChild(userMsg);
+
+                    // Render first AI response instantly
+                    const aiMsg = document.createElement('div');
+                    aiMsg.className = 'demo-msg demo-msg-ai visible';
+                    demoChat.appendChild(aiMsg);
+
+                    if (aiStep.parts) {
+                        for (const part of aiStep.parts) {
+                            if (part.kind === 'text') {
+                                const p = document.createElement('p');
+                                p.textContent = part.text;
+                                aiMsg.appendChild(p);
+                            } else if (part.kind === 'collapsible_code') {
+                                const toggle = document.createElement('div');
+                                toggle.className = 'demo-code-toggle';
+                                toggle.innerHTML =
+                                    '<div class="demo-code-toggle-header">' +
+                                        '<iconify-icon icon="lucide:chevron-right" width="14" class="demo-chevron"></iconify-icon>' +
+                                        '<span>' + part.label + '</span>' +
+                                    '</div>' +
+                                    '<div class="demo-code-toggle-body">' +
+                                        '<div class="demo-code-block"><pre>' + part.text + '</pre></div>' +
+                                    '</div>';
+                                aiMsg.appendChild(toggle);
+                                toggle.querySelector('.demo-code-toggle-header').addEventListener('click', () => {
+                                    toggle.classList.toggle('open');
+                                    scrollChat();
+                                });
+                            } else if (part.kind === 'setup_btns') {
+                                const wrapper = document.createElement('div');
+                                wrapper.className = 'demo-setup-btns';
+                                const selected = new Set();
+                                let connectBtn;
+                                for (const b of part.buttons) {
+                                    const el = document.createElement('div');
+                                    el.className = 'demo-setup-btn';
+                                    el.innerHTML = '<iconify-icon icon="' + b.icon + '" width="16"></iconify-icon>' + b.label;
+                                    el.addEventListener('click', () => {
+                                        el.classList.toggle('selected');
+                                        if (selected.has(b.label)) { selected.delete(b.label); } else { selected.add(b.label); }
+                                        if (connectBtn) connectBtn.classList.toggle('enabled', selected.size > 0);
+                                    });
+                                    wrapper.appendChild(el);
+                                }
+                                aiMsg.appendChild(wrapper);
+
+                                const isTeammates = activeTab === 'teammates';
+                                connectBtn = document.createElement('div');
+                                connectBtn.className = 'demo-connect-btn visible';
+                                connectBtn.innerHTML = isTeammates
+                                    ? '<iconify-icon icon="lucide:bot" width="16"></iconify-icon>Create'
+                                    : '<iconify-icon icon="lucide:plug" width="16"></iconify-icon>Connect';
+                                aiMsg.appendChild(connectBtn);
+
+                                const tabAtClick = activeTab;
+                                connectBtn.addEventListener('click', async () => {
+                                    if (selected.size === 0 || animating) return;
+                                    animating = true;
+                                    const names = Array.from(selected);
+                                    const label = names.join(' and ');
+                                    let confirmText;
+                                    if (tabAtClick === 'teammates') {
+                                        await addUserMsg('Create ' + label);
+                                        stepIndex++;
+                                        confirmText = 'Done! Your ' + label + ' AI teammate' + (names.length > 1 ? 's have' : ' has') + ' been created successfully and ' + (names.length > 1 ? 'are' : 'is') + ' ready to go. They will start handling tasks for your app right away.';
+                                    } else {
+                                        await addUserMsg('Connect ' + label);
+                                        stepIndex++;
+                                        confirmText = 'Done! ' + label + (names.length > 1 ? ' are' : ' is') + ' now connected to your staging app and ready to go. Staging users will start receiving notifications right away.';
+                                    }
+                                    await addAiMsg([{ kind: 'text', text: confirmText }]);
+                                    stepIndex++;
+                                    animating = false;
+                                    stageNextUserMsg();
+                                });
+                            }
+                        }
+                    }
+
+                    stepIndex = 2;
+                    stageNextUserMsg();
+                    scrollChat();
+                }
+
                 async function addUserMsg(text) {
                     demoInput.textContent = 'Ask a question...';
                     demoInput.classList.remove('has-text');
@@ -1905,11 +2274,37 @@
                             await sleep(500);
                             const btn = document.createElement('div');
                             btn.className = 'demo-deploy-btn';
-                            btn.innerHTML = '<iconify-icon icon="lucide:rocket" width="16"></iconify-icon>' + part.text;
+                            btn.style.cursor = 'pointer';
+                            btn.textContent = part.text;
                             msg.appendChild(btn);
                             scrollChat();
                             requestAnimationFrame(() => {
                                 requestAnimationFrame(() => btn.classList.add('visible'));
+                            });
+                            btn.addEventListener('click', () => {
+                                // Trigger the staging deploy animation
+                                const stagingBtn = document.getElementById('deploy-btn');
+                                if (stagingBtn && !stagingBtn.disabled) stagingBtn.click();
+
+                                // Also directly create the RecipeBox tab (in case staging btn isn't ready)
+                                setTimeout(() => {
+                                    const tabBar = document.getElementById('demo-tab-bar');
+                                    if (!tabBar) return;
+                                    if (!document.querySelector('[data-tab="recipe-app"]')) {
+                                        const plusTab = tabBar.querySelector('.demo-tab:last-child');
+                                        const recipeTab = document.createElement('div');
+                                        recipeTab.className = 'demo-tab';
+                                        recipeTab.dataset.tab = 'recipe-app';
+                                        recipeTab.innerHTML = 'RecipeBox <iconify-icon icon="lucide:x" width="12"></iconify-icon>';
+                                        tabBar.insertBefore(recipeTab, plusTab);
+                                    }
+                                    tabBar.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
+                                    document.querySelector('[data-tab="recipe-app"]').classList.add('active');
+                                    activeTab = 'recipe-app';
+                                    demoChat.style.display = 'none';
+                                    document.querySelector('.demo-chat-bar').style.display = 'none';
+                                    document.getElementById('demo-app-preview').style.display = 'flex';
+                                }, 1200);
                             });
                         } else if (part.kind === 'setup_btns') {
                             await sleep(300);
@@ -2016,20 +2411,92 @@
                     // Switch active tab visuals
                     demoTabBar.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
-
-                    // Switch script
                     activeTab = tabName;
-                    activeScript = scripts[tabName];
-                    stepIndex = 0;
-                    demoChat.innerHTML = '';
-                    stageNextUserMsg();
+
+                    const appPreview = document.getElementById('demo-app-preview');
+                    const chatBar = document.querySelector('.demo-chat-bar');
+
+                    if (tabName === 'recipe-app') {
+                        // Show the deployed app preview, hide chat
+                        demoChat.style.display = 'none';
+                        chatBar.style.display = 'none';
+                        appPreview.style.display = 'flex';
+                    } else {
+                        // Show chat, hide app preview
+                        appPreview.style.display = 'none';
+                        demoChat.style.display = 'flex';
+                        chatBar.style.display = 'flex';
+                        // Switch script
+                        activeScript = scripts[tabName];
+                        demoChat.innerHTML = '';
+                        seedFirstMessages();
+                    }
+                });
+
+                // Close tab on X click
+                demoTabBar.addEventListener('click', (e) => {
+                    const xIcon = e.target.closest('iconify-icon[icon="lucide:x"]');
+                    if (!xIcon) return;
+                    const tab = xIcon.closest('.demo-tab[data-tab]');
+                    if (!tab) return;
+                    e.stopPropagation();
+
+                    // Don't close the last tab
+                    const allTabs = demoTabBar.querySelectorAll('.demo-tab[data-tab]');
+                    if (allTabs.length <= 1) return;
+
+                    const wasActive = tab.classList.contains('active');
+                    const closedTabName = tab.dataset.tab;
+
+                    // Find adjacent tab to switch to if closing the active one
+                    let nextTab = null;
+                    if (wasActive) {
+                        nextTab = tab.nextElementSibling;
+                        if (!nextTab || !nextTab.dataset.tab) nextTab = tab.previousElementSibling;
+                    }
+
+                    tab.remove();
+
+                    if (wasActive && nextTab && nextTab.dataset.tab) {
+                        const tabName = nextTab.dataset.tab;
+                        demoTabBar.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
+                        nextTab.classList.add('active');
+                        activeTab = tabName;
+
+                        const appPreview = document.getElementById('demo-app-preview');
+                        const chatBar = document.querySelector('.demo-chat-bar');
+
+                        if (tabName === 'recipe-app') {
+                            demoChat.style.display = 'none';
+                            chatBar.style.display = 'none';
+                            appPreview.style.display = 'flex';
+                        } else {
+                            appPreview.style.display = 'none';
+                            demoChat.style.display = 'flex';
+                            chatBar.style.display = 'flex';
+                            activeScript = scripts[tabName];
+                            demoChat.innerHTML = '';
+                            seedFirstMessages();
+                        }
+                    } else if (wasActive) {
+                        // Fallback: just show chat
+                        const appPreview = document.getElementById('demo-app-preview');
+                        appPreview.style.display = 'none';
+                        demoChat.style.display = 'flex';
+                        document.querySelector('.demo-chat-bar').style.display = 'flex';
+                    }
+
+                    // If we closed recipe-app but it wasn't active, just hide preview if showing
+                    if (closedTabName === 'recipe-app' && !wasActive) {
+                        document.getElementById('demo-app-preview').style.display = 'none';
+                    }
                 });
 
                 // Stage the first user message when hero scrolls into view
                 const demoObserver = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
-                            stageNextUserMsg();
+                            seedFirstMessages();
                             demoObserver.unobserve(entry.target);
                         }
                     });
@@ -2181,11 +2648,28 @@
                         }
                     }, 800);
 
-                    // Phase 3: Confetti burst from LIVE box
+                    // Phase 3: Confetti burst from LIVE box + open deployed app
                     setTimeout(() => {
                         const rect = deployLive.getBoundingClientRect();
                         const x = (rect.left + rect.width / 2) / window.innerWidth;
                         const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+                        // Add RecipeBox tab to the demo window and switch to it
+                        if (!document.querySelector('[data-tab="recipe-app"]')) {
+                            const plusTab = demoTabBar.querySelector('.demo-tab:last-child');
+                            const recipeTab = document.createElement('div');
+                            recipeTab.className = 'demo-tab';
+                            recipeTab.dataset.tab = 'recipe-app';
+                            recipeTab.innerHTML = 'RecipeBox <iconify-icon icon="lucide:x" width="12"></iconify-icon>';
+                            demoTabBar.insertBefore(recipeTab, plusTab);
+                        }
+                        // Switch to the recipe-app tab
+                        demoTabBar.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
+                        document.querySelector('[data-tab="recipe-app"]').classList.add('active');
+                        activeTab = 'recipe-app';
+                        demoChat.style.display = 'none';
+                        document.querySelector('.demo-chat-bar').style.display = 'none';
+                        document.getElementById('demo-app-preview').style.display = 'flex';
 
                         // Main burst
                         confetti({
@@ -2238,16 +2722,14 @@
                 let rewinding = false;
                 const whoopsLabel = document.getElementById('whoops-label');
                 const oopsPhrases = [
-                    'Oops', 'Whoops', 'Oopsie', 'Whoopsie', 'My bad', 'Sorry',
-                    'Uh-oh', 'Aw, crap', 'Dang it', 'Whoop-daisy', 'Oopsy-daisy',
-                    'Welp', 'Heh\u2026 my bad', 'Silly me', 'Oh no', 'Yikes', 'Eek',
-                    'Uh\u2026 that\'s not right', 'Welp, that happened', 'Oof',
+                    'Whoops', 'Oopsie', 'My bad', 'Sorry', 'Uh-oh', 'Aw, crap',
+                    'Dang it', 'Welp', 'Silly me', 'Oh no', 'Yikes', 'Eek',
+                    'Uh\u2026 that\'s not right', 'So...that happened', 'Oof',
                     'Egads', 'Alas', 'Woe is me', 'Oh dear', 'Heavens',
-                    'Curse my hubris', 'That one\'s on me', 'I have made a mistake',
+                    'Curse my hubris', 'That one\'s on me', 'All is lost',
                     'Rookie move', 'That\'s embarrassing', 'I regret everything',
-                    'Nailed it (not)', 'Cool cool cool', 'Great. Just great.',
-                    'Love that for me', 'Fantastic', 'Crap', 'S***', 'D*** it',
-                    'F***', 'Welp\u2026 f***'
+                    'Cool cool cool', 'Great. Just great.', 'Love that for me',
+                    'Fantastic', 'Crap', 'S***', 'D*** it', 'F*** me'
                 ];
                 let phraseIndex = 0;
 
@@ -2390,7 +2872,7 @@
             if (securityVisual) {
                 const securityGifs = [
                     'Black and White Marketing gifs/gandalf-you-shall-not-past.gif',
-                    'Black and White Marketing gifs/Jurassic Park Hacker GIF by ScreenJunkies.gif',
+                    'Black and White Marketing gifs/ship it jurassic park GIF.gif',
                     'Black and White Marketing gifs/I Dont Think So No Way GIF.gif',
                     'Black and White Marketing gifs/No Way Bird GIF.gif',
                     'Black and White Marketing gifs/National Basketball Association Sport GIF by Milwaukee Bucks.gif',
@@ -2437,6 +2919,15 @@
                     }, 900);
                 });
             }
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const isOpen = item.classList.contains('faq-open');
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('faq-open'));
+                if (!isOpen) item.classList.add('faq-open');
+            });
         });
     </script>
 

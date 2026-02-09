@@ -223,6 +223,12 @@
             border-color: #10B981;
             box-shadow: 0 0 24px rgba(16, 185, 129, 0.25);
         }
+        .deploy-live-text {
+            transition: color 0.5s ease;
+        }
+        .deploy-success .deploy-live-text {
+            color: #10B981;
+        }
 
         /* Checkmark — scales in on .deploy-success */
         .deploy-check {
@@ -1431,7 +1437,7 @@
                                     <!-- LIVE Node with success states -->
                                     <div class="flex flex-col items-center gap-3">
                                         <div id="deploy-live" class="deploy-live-box w-32 sm:w-40 md:w-48 h-[100px] bg-white border rounded-lg flex flex-col items-center justify-center gap-1 relative">
-                                            <span class="text-sm font-mono text-emerald-600">LIVE</span>
+                                            <span class="deploy-live-text text-sm font-mono text-gray-400">LIVE</span>
                                             <!-- Checkmark overlay -->
                                             <div class="deploy-check absolute -top-2 -right-2 w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center shadow-md">
                                                 <iconify-icon icon="solar:check-circle-bold" width="14" style="color: white;"></iconify-icon>
@@ -2152,7 +2158,7 @@
                     if (nextUserStep) {
                         demoInput.textContent = nextUserStep.text;
                         demoInput.classList.add('has-text');
-                        demoSend.classList.add('ready');
+                        if (!demoSend.classList.contains('pulse')) demoSend.classList.add('ready');
                     } else {
                         demoInput.textContent = 'Ask a question...';
                         demoInput.classList.remove('has-text');
@@ -2452,6 +2458,8 @@
                     const tabName = tab.dataset.tab;
                     if (tabName === activeTab) return;
 
+                    demoSend.classList.remove('pulse');
+
                     // Switch active tab visuals
                     demoTabBar.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
@@ -2744,50 +2752,51 @@
 
                     // Phase 3: Confetti burst from LIVE box + open deployed app
                     setTimeout(() => {
+                        // Fire confetti first — from the LIVE box position
                         const rect = deployLive.getBoundingClientRect();
                         const x = (rect.left + rect.width / 2) / window.innerWidth;
                         const y = (rect.top + rect.height / 2) / window.innerHeight;
 
-                        // Add RecipeBox tab to the demo window and switch to it
-                        if (!document.querySelector('[data-tab="recipe-app"]')) {
-                            const plusTab = demoTabBar.querySelector('.demo-tab:last-child');
-                            const recipeTab = document.createElement('div');
-                            recipeTab.className = 'demo-tab';
-                            recipeTab.dataset.tab = 'recipe-app';
-                            recipeTab.innerHTML = 'RecipeBox <iconify-icon icon="lucide:x" width="12"></iconify-icon>';
-                            demoTabBar.insertBefore(recipeTab, plusTab);
-                        }
-                        // Switch to the recipe-app tab
-                        demoTabBar.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
-                        document.querySelector('[data-tab="recipe-app"]').classList.add('active');
-                        activeTab = 'recipe-app';
-                        demoChat.style.display = 'none';
-                        document.querySelector('.demo-chat-bar').style.display = 'none';
-                        document.getElementById('demo-app-preview').style.display = 'flex';
-
-                        // Main burst
-                        confetti({
-                            particleCount: 80,
-                            spread: 70,
-                            origin: { x, y },
-                            colors: ['#10B981', '#34D399', '#6EE7B7', '#171717', '#3B82F6'],
-                            ticks: 120,
-                            gravity: 1.2,
-                            scalar: 0.9,
-                        });
-
-                        // Second smaller burst slightly delayed
-                        setTimeout(() => {
+                        try {
                             confetti({
-                                particleCount: 30,
-                                spread: 40,
-                                origin: { x: x + 0.02, y: y - 0.02 },
-                                colors: ['#10B981', '#A7F3D0', '#FFFFFF'],
-                                ticks: 80,
-                                gravity: 1.5,
-                                scalar: 0.7,
+                                particleCount: 200,
+                                spread: 100,
+                                origin: { x, y },
+                                colors: ['#10B981', '#34D399', '#6EE7B7', '#171717', '#3B82F6'],
+                                ticks: 300,
+                                gravity: 0.6,
+                                scalar: 1.1,
                             });
-                        }, 150);
+                            setTimeout(() => {
+                                confetti({
+                                    particleCount: 80,
+                                    spread: 60,
+                                    origin: { x: x + 0.02, y: y - 0.02 },
+                                    colors: ['#10B981', '#A7F3D0', '#FFFFFF'],
+                                    ticks: 200,
+                                    gravity: 0.8,
+                                    scalar: 0.9,
+                                });
+                            }, 200);
+                        } catch(e) { console.error('Confetti error:', e); }
+
+                        // Then switch to RecipeBox tab
+                        try {
+                            if (!document.querySelector('[data-tab="recipe-app"]')) {
+                                const plusTab = demoTabBar.querySelector('.demo-tab:last-child');
+                                const recipeTab = document.createElement('div');
+                                recipeTab.className = 'demo-tab';
+                                recipeTab.dataset.tab = 'recipe-app';
+                                recipeTab.innerHTML = 'RecipeBox <iconify-icon icon="lucide:x" width="12"></iconify-icon>';
+                                demoTabBar.insertBefore(recipeTab, plusTab);
+                            }
+                            demoTabBar.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
+                            document.querySelector('[data-tab="recipe-app"]').classList.add('active');
+                            activeTab = 'recipe-app';
+                            demoChat.style.display = 'none';
+                            document.querySelector('.demo-chat-bar').style.display = 'none';
+                            document.getElementById('demo-app-preview').style.display = 'flex';
+                        } catch(e) { console.error('Tab switch error:', e); }
                     }, 1200);
 
                     // Phase 4: Reset after hold

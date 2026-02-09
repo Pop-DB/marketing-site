@@ -223,6 +223,12 @@
             border-color: #10B981;
             box-shadow: 0 0 24px rgba(16, 185, 129, 0.25);
         }
+        .deploy-live-text {
+            transition: color 0.5s ease;
+        }
+        .deploy-success .deploy-live-text {
+            color: #10B981;
+        }
 
         /* Checkmark — scales in on .deploy-success */
         .deploy-check {
@@ -302,7 +308,7 @@
             color: #171717;
         }
         @media (max-width: 767px) {
-            .feature-card { flex: none; }
+            .feature-card { flex: none; padding: 16px 20px; }
             .feature-card .feature-image-wrap {
                 grid-template-columns: 1fr !important;
             }
@@ -901,11 +907,6 @@
             0%, 60%, 100% { transform: translateY(0); }
             30% { transform: translateY(-4px); }
         }
-        @media (max-width: 767px) {
-            #demo-sidebar { display: none; }
-            #hero-demo { height: 400px; }
-        }
-
         /* ===== Desktop Background & Draggable Window ===== */
         #hero-desktop {
             position: relative;
@@ -974,10 +975,6 @@
         }
         .demo-drag-handle:active {
             cursor: grabbing;
-        }
-        @media (max-width: 767px) {
-            #hero-desktop { height: 460px; }
-            #hero-window { width: 95%; }
         }
 
         /* ===== Security: Lock → Close → Pulse → GIF ===== */
@@ -1050,8 +1047,8 @@
     <main class="relative z-10 flex flex-col w-full">
 
         <!-- Hero Section -->
-        <section class="relative min-h-[90vh] flex flex-col items-center justify-center pt-32 pb-20 px-6 md:px-12">
-            <div class="max-w-3xl text-center space-y-8 relative z-10">
+        <section class="relative min-h-[90vh] flex flex-col items-center justify-center pt-24 sm:pt-32 pb-12 sm:pb-20 px-6 md:px-12">
+            <div class="max-w-3xl text-center space-y-6 sm:space-y-8 relative z-10">
 
 
                 <!-- Headline -->
@@ -1062,7 +1059,7 @@
 
                 <!-- Subtext -->
                 <p class="reveal reveal-delay-2 max-w-xl mx-auto font-sans text-sm sm:text-base md:text-lg text-subtle leading-relaxed">
-                    Everything you need to build and deploy apps. Database, hosting, auth, storage, and a simple CLI with one predictable monthly cost.
+                    PopDB turns your ideas into real apps with a powerful app builder, database, hosting, and auth for a predictable monthly fee.
                 </p>
 
                 <!-- CTA -->
@@ -1078,7 +1075,7 @@
 
             <!-- Hero Visual: Desktop with Draggable Window -->
             <div class="reveal reveal-delay-4 mt-12 sm:mt-16 md:mt-20 w-full max-w-5xl mx-auto">
-                <div id="hero-desktop">
+                <div id="hero-desktop" class="hidden md:block">
                     <!-- Desktop Reset Button -->
                     <div id="desktop-reset" class="desktop-reset-btn" title="Re-center window">
                         <iconify-icon icon="lucide:refresh-cw" width="14" style="color:rgba(255,255,255,0.5)"></iconify-icon>
@@ -1282,17 +1279,42 @@
 
                     <!-- Desktop Dock -->
                 </div><!-- /hero-desktop -->
+
+                <!-- Mobile Static Hero Image (shown below md breakpoint) -->
+                <div id="hero-mobile-image" class="md:hidden mx-1">
+                    <div class="relative rounded-xl overflow-hidden shadow-xl shadow-black/15">
+                        <!-- Browser Chrome (visual only) -->
+                        <div class="flex items-center gap-1.5 sm:gap-2 px-2 py-1 sm:px-3 sm:py-1.5 border-b border-gray-200 bg-gray-50 rounded-t-xl">
+                            <div class="flex gap-1.5">
+                                <div class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-red-400/80"></div>
+                                <div class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-yellow-400/80"></div>
+                                <div class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-green-400/80"></div>
+                            </div>
+                            <div class="flex-1 flex items-center justify-center gap-1 sm:gap-1.5 min-w-0">
+                                <iconify-icon icon="solar:lock-keyhole-minimalistic-linear" width="10" class="text-gray-400 shrink-0"></iconify-icon>
+                                <span class="text-[8px] sm:text-[10px] font-mono text-gray-400 truncate">my-awesome-idea.popdb.app</span>
+                            </div>
+                        </div>
+                        <!-- Screenshot -->
+                        <img
+                            src="Background Breakpoint image/App Demo Builder photo for break point on website.png"
+                            alt="PopDB app builder demo showing AI chat, database schema, and managed hosting"
+                            class="w-full h-auto block"
+                            loading="lazy"
+                        >
+                    </div>
+                </div>
             </div>
         </section>
 
         <!-- Top 3 Features (Expanding Accordion) -->
-        <section class="py-20 px-6 md:px-12 border-y border-border/50 bg-canvas/50">
+        <section class="py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-12 border-y border-border/50 bg-canvas/50">
             <div class="max-w-7xl mx-auto">
                 <div id="feature-accordion" class="flex flex-col md:flex-row gap-4 items-stretch">
 
                     <!-- Card 1: Start Building Now -->
                     <div class="reveal feature-card active" data-feature="0">
-                        <div class="flex items-center gap-4 md:gap-6">
+                        <div class="flex items-center gap-3 sm:gap-4 md:gap-6">
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-start gap-4">
                                     <span class="feature-number font-mono text-sm font-medium mt-0.5">01</span>
@@ -1306,7 +1328,7 @@
                             </div>
                             <div class="feature-image-wrap">
                                 <div class="feature-image-inner">
-                                    <div class="rounded-2xl border border-border/50 overflow-hidden w-32 h-32 md:w-44 md:h-44 shrink-0">
+                                    <div class="rounded-2xl border border-border/50 overflow-hidden w-20 h-20 sm:w-32 sm:h-32 md:w-44 md:h-44 shrink-0">
                                         <img src="Dark backgrounds Carousel/Startbuilding dark background.png" alt="Quick Setup Guide" class="w-full h-full object-cover block">
                                     </div>
                                 </div>
@@ -1316,7 +1338,7 @@
 
                     <!-- Card 2: Private Database -->
                     <div class="reveal reveal-delay-1 feature-card" data-feature="1">
-                        <div class="flex items-center gap-4 md:gap-6">
+                        <div class="flex items-center gap-3 sm:gap-4 md:gap-6">
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-start gap-4">
                                     <span class="feature-number font-mono text-sm font-medium mt-0.5">02</span>
@@ -1330,7 +1352,7 @@
                             </div>
                             <div class="feature-image-wrap">
                                 <div class="feature-image-inner">
-                                    <div class="rounded-2xl border border-border/50 overflow-hidden w-32 h-32 md:w-44 md:h-44 shrink-0">
+                                    <div class="rounded-2xl border border-border/50 overflow-hidden w-20 h-20 sm:w-32 sm:h-32 md:w-44 md:h-44 shrink-0">
                                         <img src="Dark backgrounds Carousel/Databases Darkbackground.png" alt="Private Database" class="w-full h-full object-cover block">
                                     </div>
                                 </div>
@@ -1340,7 +1362,7 @@
 
                     <!-- Card 3: Managed Hosting -->
                     <div class="reveal reveal-delay-2 feature-card" data-feature="2">
-                        <div class="flex items-center gap-4 md:gap-6">
+                        <div class="flex items-center gap-3 sm:gap-4 md:gap-6">
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-start gap-4">
                                     <span class="feature-number font-mono text-sm font-medium mt-0.5">03</span>
@@ -1354,7 +1376,7 @@
                             </div>
                             <div class="feature-image-wrap">
                                 <div class="feature-image-inner">
-                                    <div class="rounded-2xl border border-border/50 overflow-hidden w-32 h-32 md:w-44 md:h-44 shrink-0">
+                                    <div class="rounded-2xl border border-border/50 overflow-hidden w-20 h-20 sm:w-32 sm:h-32 md:w-44 md:h-44 shrink-0">
                                         <img src="Dark backgrounds Carousel/Managed Hosting Dark Background.png" alt="Managed Hosting" class="w-full h-full object-cover block" style="object-position: left center;">
                                     </div>
                                 </div>
@@ -1370,21 +1392,21 @@
         <section class="py-16 sm:py-24 md:py-32 px-6 md:px-12 bg-canvas relative">
             <div class="max-w-7xl mx-auto">
 
-                <div class="mb-16 max-w-2xl">
+                <div class="mb-8 sm:mb-12 md:mb-16 max-w-2xl">
                     <h2 class="reveal font-sans text-2xl sm:text-3xl md:text-4xl font-semibold text-obsidian tracking-tight mb-4">
                         Everything you need. Nothing you don't.
                     </h2>
-                    <p class="reveal reveal-delay-1 text-subtle text-lg">
+                    <p class="reveal reveal-delay-1 text-subtle text-base sm:text-lg">
                         PopDB handles the parts of building a business that usually require specialists.<br>
                         You focus on the product. The platform takes care of the rest.
                     </p>
                 </div>
 
                 <!-- Bento Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[minmax(200px,auto)]">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 auto-rows-[minmax(200px,auto)]">
 
                     <!-- Big Card: Experiment Safely (Staging/Prod) -->
-                    <div class="reveal md:col-span-8 group relative bg-white border border-border rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-500 p-6 flex flex-col">
+                    <div class="reveal md:col-span-8 group relative bg-white border border-border rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-500 p-4 sm:p-6 flex flex-col">
                         <div class="relative z-10 flex flex-col h-full">
                             <div class="flex items-start justify-between mb-4">
                                 <div>
@@ -1411,7 +1433,7 @@
 
                                     <!-- DEV Node with code + deploy button -->
                                     <div class="flex flex-col items-center gap-3">
-                                        <div class="w-32 sm:w-40 md:w-48 bg-white border-2 border-dashed border-orange-300 rounded-lg shadow-sm p-3 sm:p-4 md:p-5 relative">
+                                        <div class="w-28 sm:w-40 md:w-48 bg-white border-2 border-dashed border-orange-300 rounded-lg shadow-sm p-3 sm:p-4 md:p-5 relative">
                                             <!-- Label -->
                                             <p class="text-xs md:text-sm font-sans text-obsidian/70 text-center mb-4">Ready to Deploy?</p>
                                             <!-- Deploy Button -->
@@ -1432,8 +1454,8 @@
 
                                     <!-- LIVE Node with success states -->
                                     <div class="flex flex-col items-center gap-3">
-                                        <div id="deploy-live" class="deploy-live-box w-32 sm:w-40 md:w-48 h-[100px] bg-white border rounded-lg flex flex-col items-center justify-center gap-1 relative">
-                                            <span class="text-sm font-mono text-emerald-600">LIVE</span>
+                                        <div id="deploy-live" class="deploy-live-box w-28 sm:w-40 md:w-48 h-[100px] bg-white border rounded-lg flex flex-col items-center justify-center gap-1 relative">
+                                            <span class="deploy-live-text text-sm font-mono text-gray-400">LIVE</span>
                                             <!-- Checkmark overlay -->
                                             <div class="deploy-check absolute -top-2 -right-2 w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center shadow-md">
                                                 <iconify-icon icon="solar:check-circle-bold" width="14" style="color: white;"></iconify-icon>
@@ -1454,7 +1476,7 @@
                     </div>
 
                     <!-- Side Card 1: Backups -->
-                    <div class="reveal reveal-delay-1 md:col-span-4 group relative bg-white border border-border rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 p-5 sm:p-6 md:p-8">
+                    <div class="reveal reveal-delay-1 md:col-span-4 group relative bg-white border border-border rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 p-4 sm:p-6 md:p-8">
                         <div class="w-10 h-10 bg-canvas border border-border rounded-lg flex items-center justify-center mb-4 text-obsidian">
                             <iconify-icon icon="solar:history-linear" width="20" stroke-width="1.5"></iconify-icon>
                         </div>
@@ -1481,7 +1503,7 @@
                     </div>
 
                     <!-- Side Card 2: User Mgmt -->
-                    <div class="reveal reveal-delay-2 md:col-span-4 group relative bg-white border border-border rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 p-5 sm:p-6 md:p-8">
+                    <div class="reveal reveal-delay-2 md:col-span-4 group relative bg-white border border-border rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 p-4 sm:p-6 md:p-8">
                         <div class="w-10 h-10 bg-canvas border border-border rounded-lg flex items-center justify-center mb-4 text-obsidian">
                             <iconify-icon icon="solar:users-group-rounded-linear" width="20" stroke-width="1.5"></iconify-icon>
                         </div>
@@ -1496,7 +1518,7 @@
                     </div>
 
                     <!-- Side Card 3: Security -->
-                    <div id="security-card" class="reveal reveal-delay-3 md:col-span-4 group relative bg-white border border-border rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 p-5 sm:p-6 md:p-8">
+                    <div id="security-card" class="reveal reveal-delay-3 md:col-span-4 group relative bg-white border border-border rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 p-4 sm:p-6 md:p-8">
                         <div class="w-10 h-10 bg-canvas border border-border rounded-lg flex items-center justify-center mb-4 text-obsidian">
                             <iconify-icon icon="solar:shield-keyhole-linear" width="20" stroke-width="1.5"></iconify-icon>
                         </div>
@@ -1521,7 +1543,7 @@
                     </div>
 
                     <!-- Side Card 4: Storage -->
-                    <div class="reveal reveal-delay-4 md:col-span-4 group relative bg-white border border-border rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 p-5 sm:p-6 md:p-8">
+                    <div class="reveal reveal-delay-4 md:col-span-4 group relative bg-white border border-border rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 p-4 sm:p-6 md:p-8">
                         <div class="w-10 h-10 bg-canvas border border-border rounded-lg flex items-center justify-center mb-4 text-obsidian">
                             <iconify-icon icon="solar:cloud-upload-linear" width="20" stroke-width="1.5"></iconify-icon>
                         </div>
@@ -1613,258 +1635,250 @@
                     <!-- RIGHT COLUMN: Logo Marquee -->
                     <div class="reveal flex flex-col gap-4 py-8 lg:pl-12 overflow-hidden" style="mask-image: linear-gradient(to bottom, transparent, black 8%, black 92%, transparent); -webkit-mask-image: linear-gradient(to bottom, transparent, black 8%, black 92%, transparent);">
 
-                        <!-- Marquee Row 1: scrolls left -->
+                        <!-- Marquee Row 1: AI & Data (scrolls left) -->
                         <div class="flex overflow-hidden" style="mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);">
                             <div class="flex gap-2 md:gap-3 animate-marquee">
                                 <!-- Set 1 -->
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:cursor" width="28" height="28" style="color: #171717;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Cursor</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:openai" width="28" height="28" style="color: #412991;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">OpenAI</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:anthropic" width="28" height="28" style="color: #191919;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Anthropic</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:googlegemini" width="28" height="28" style="color: #8E75B2;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Gemini</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:elevenlabs" width="28" height="28" style="color: #000000;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">ElevenLabs</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:algolia" width="28" height="28" style="color: #003DFF;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Algolia</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:googleanalytics" width="28" height="28" style="color: #E37400;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Analytics</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:mixpanel" width="28" height="28" style="color: #7856FF;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Mixpanel</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
                                     <iconify-icon icon="simple-icons:stackblitz" width="28" height="28" style="color: #1389FD;"></iconify-icon>
                                     <span class="text-[9px] md:text-[10px] text-subtle font-mono">Bolt</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
                                     <iconify-icon icon="simple-icons:v0" width="28" height="28" style="color: #171717;"></iconify-icon>
                                     <span class="text-[9px] md:text-[10px] text-subtle font-mono">v0</span>
-                                </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <span class="text-2xl leading-none" style="color: #FF6B6B;">&#9829;</span>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Lovable</span>
-                                </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:replit" width="28" height="28" style="color: #F26207;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Replit</span>
-                                </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:claude" width="28" height="28" style="color: #D97757;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Claude</span>
-                                </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:openai" width="28" height="28" style="color: #412991;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">ChatGPT</span>
                                 </div>
                                 <!-- Set 2 (duplicate for seamless loop) -->
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:cursor" width="28" height="28" style="color: #171717;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Cursor</span>
-                                </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:stackblitz" width="28" height="28" style="color: #1389FD;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Bolt</span>
-                                </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:v0" width="28" height="28" style="color: #171717;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">v0</span>
-                                </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <span class="text-2xl leading-none" style="color: #FF6B6B;">&#9829;</span>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Lovable</span>
-                                </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:replit" width="28" height="28" style="color: #F26207;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Replit</span>
-                                </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:claude" width="28" height="28" style="color: #D97757;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Claude</span>
-                                </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
                                     <iconify-icon icon="simple-icons:openai" width="28" height="28" style="color: #412991;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">ChatGPT</span>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">OpenAI</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:anthropic" width="28" height="28" style="color: #191919;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Anthropic</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:googlegemini" width="28" height="28" style="color: #8E75B2;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Gemini</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:elevenlabs" width="28" height="28" style="color: #000000;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">ElevenLabs</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:algolia" width="28" height="28" style="color: #003DFF;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Algolia</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:googleanalytics" width="28" height="28" style="color: #E37400;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Analytics</span>
+                                </div>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:mixpanel" width="28" height="28" style="color: #7856FF;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Mixpanel</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Marquee Row 2: scrolls right (reverse) -->
+                        <!-- Marquee Row 2: Auth & Communication (scrolls right) -->
                         <div class="flex overflow-hidden" style="mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);">
                             <div class="flex gap-2 md:gap-3 animate-marquee-reverse">
                                 <!-- Set 1 -->
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:vercel" width="28" height="28" style="color: #171717;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Vercel</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:auth0" width="28" height="28" style="color: #EB5424;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Auth0</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:netlify" width="28" height="28" style="color: #00C7B7;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Netlify</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:okta" width="28" height="28" style="color: #007DC1;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Okta</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:github" width="28" height="28" style="color: #171717;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">GitHub</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="solar:mailbox-linear" width="28" height="28" style="color: #171717;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Email</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:supabase" width="28" height="28" style="color: #3FCF8E;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Supabase</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:sendgrid" width="28" height="28" style="color: #1B88D3;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">SendGrid</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:firebase" width="28" height="28" style="color: #DD2C00;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Firebase</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:zoom" width="28" height="28" style="color: #0B5CFF;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Zoom</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:nextdotjs" width="28" height="28" style="color: #171717;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Next.js</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:googlemeet" width="28" height="28" style="color: #00897B;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Google Meet</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:windsurf" width="28" height="28" style="color: #00B4D8;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Windsurf</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:calendly" width="28" height="28" style="color: #006BFF;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Calendly</span>
                                 </div>
                                 <!-- Set 2 (duplicate for seamless loop) -->
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:vercel" width="28" height="28" style="color: #171717;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Vercel</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:auth0" width="28" height="28" style="color: #EB5424;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Auth0</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:netlify" width="28" height="28" style="color: #00C7B7;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Netlify</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:okta" width="28" height="28" style="color: #007DC1;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Okta</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:github" width="28" height="28" style="color: #171717;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">GitHub</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="solar:mailbox-linear" width="28" height="28" style="color: #171717;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Email</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:supabase" width="28" height="28" style="color: #3FCF8E;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Supabase</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:sendgrid" width="28" height="28" style="color: #1B88D3;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">SendGrid</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:firebase" width="28" height="28" style="color: #DD2C00;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Firebase</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:zoom" width="28" height="28" style="color: #0B5CFF;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Zoom</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:nextdotjs" width="28" height="28" style="color: #171717;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Next.js</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:googlemeet" width="28" height="28" style="color: #00897B;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Google Meet</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:windsurf" width="28" height="28" style="color: #00B4D8;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Windsurf</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:calendly" width="28" height="28" style="color: #006BFF;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Calendly</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Marquee Row 3: scrolls left (slower) -->
+                        <!-- Marquee Row 3: Commerce & Finance (scrolls left, slower) -->
                         <div class="flex overflow-hidden" style="mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);">
                             <div class="flex gap-2 md:gap-3" style="animation: marquee-scroll 40s linear infinite;">
                                 <!-- Set 1 -->
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:stripe" width="28" height="28" style="color: #635BFF;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Stripe</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:shopify" width="28" height="28" style="color: #96BE28;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Shopify</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:resend" width="28" height="28" style="color: #171717;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Resend</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:woocommerce" width="28" height="28" style="color: #96588A;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">WooCommerce</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:cloudflare" width="28" height="28" style="color: #F38020;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Cloudflare</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:klaviyo" width="28" height="28" style="color: #000000;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Klaviyo</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:twilio" width="28" height="28" style="color: #F22F46;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Twilio</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:quickbooks" width="28" height="28" style="color: #2CA01C;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">QuickBooks</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:react" width="28" height="28" style="color: #61DAFB;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">React</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:docusign" width="28" height="28" style="color: #FFCD00;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">DocuSign</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:svelte" width="28" height="28" style="color: #FF3E00;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Svelte</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:gusto" width="28" height="28" style="color: #F45D48;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Gusto</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:nuxtdotjs" width="28" height="28" style="color: #00DC82;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Nuxt</span>
+                                <!-- Set 2 (duplicate for seamless loop) -->
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:shopify" width="28" height="28" style="color: #96BE28;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Shopify</span>
                                 </div>
-                                <!-- Set 2 (duplicate) -->
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:stripe" width="28" height="28" style="color: #635BFF;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Stripe</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:woocommerce" width="28" height="28" style="color: #96588A;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">WooCommerce</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:resend" width="28" height="28" style="color: #171717;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Resend</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:klaviyo" width="28" height="28" style="color: #000000;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Klaviyo</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:cloudflare" width="28" height="28" style="color: #F38020;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Cloudflare</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:quickbooks" width="28" height="28" style="color: #2CA01C;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">QuickBooks</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:twilio" width="28" height="28" style="color: #F22F46;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Twilio</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:docusign" width="28" height="28" style="color: #FFCD00;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">DocuSign</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:react" width="28" height="28" style="color: #61DAFB;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">React</span>
-                                </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:svelte" width="28" height="28" style="color: #FF3E00;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Svelte</span>
-                                </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:nuxtdotjs" width="28" height="28" style="color: #00DC82;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Nuxt</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:gusto" width="28" height="28" style="color: #F45D48;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Gusto</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Marquee Row 4: scrolls right (slower) -->
+                        <!-- Marquee Row 4: Infrastructure & Productivity (scrolls right, slower) -->
                         <div class="flex overflow-hidden" style="mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);">
                             <div class="flex gap-2 md:gap-3" style="animation: marquee-scroll-reverse 35s linear infinite;">
                                 <!-- Set 1 -->
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:postgresql" width="28" height="28" style="color: #4169E1;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Postgres</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:amazons3" width="28" height="28" style="color: #569A31;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">AWS S3</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:docker" width="28" height="28" style="color: #2496ED;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Docker</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:cloudinary" width="28" height="28" style="color: #3448C5;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Cloudinary</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:amazonaws" width="28" height="28" style="color: #FF9900;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">AWS</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:amplitude" width="28" height="28" style="color: #0061FF;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Amplitude</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:tailwindcss" width="28" height="28" style="color: #06B6D4;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Tailwind</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:asana" width="28" height="28" style="color: #F06A6A;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Asana</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:vuedotjs" width="28" height="28" style="color: #4FC08D;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Vue</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:trello" width="28" height="28" style="color: #0079BF;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Trello</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:typescript" width="28" height="28" style="color: #3178C6;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">TypeScript</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:googleforms" width="28" height="28" style="color: #7248B9;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Google Forms</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:zapier" width="28" height="28" style="color: #FF4F00;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Zapier</span>
+                                <!-- Set 2 (duplicate for seamless loop) -->
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:amazons3" width="28" height="28" style="color: #569A31;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">AWS S3</span>
                                 </div>
-                                <!-- Set 2 (duplicate) -->
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:postgresql" width="28" height="28" style="color: #4169E1;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Postgres</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:cloudinary" width="28" height="28" style="color: #3448C5;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Cloudinary</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:docker" width="28" height="28" style="color: #2496ED;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Docker</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:amplitude" width="28" height="28" style="color: #0061FF;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Amplitude</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:amazonaws" width="28" height="28" style="color: #FF9900;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">AWS</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:asana" width="28" height="28" style="color: #F06A6A;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Asana</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:tailwindcss" width="28" height="28" style="color: #06B6D4;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Tailwind</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:trello" width="28" height="28" style="color: #0079BF;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Trello</span>
                                 </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:vuedotjs" width="28" height="28" style="color: #4FC08D;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Vue</span>
-                                </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:typescript" width="28" height="28" style="color: #3178C6;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">TypeScript</span>
-                                </div>
-                                <div class="flex-shrink-0 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-                                    <iconify-icon icon="simple-icons:zapier" width="28" height="28" style="color: #FF4F00;"></iconify-icon>
-                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Zapier</span>
+                                <div class="flex-shrink-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] md:w-[88px] md:h-[88px] flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-border bg-canvas hover:border-obsidian/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
+                                    <iconify-icon icon="simple-icons:googleforms" width="28" height="28" style="color: #7248B9;"></iconify-icon>
+                                    <span class="text-[9px] md:text-[10px] text-subtle font-mono">Google Forms</span>
                                 </div>
                             </div>
                         </div>
@@ -1878,14 +1892,14 @@
         <!-- FAQ Section -->
         <section id="faq" class="py-16 sm:py-24 md:py-32 px-6 md:px-12 bg-canvas">
             <div class="max-w-7xl mx-auto">
-                <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-start">
+                <div class="grid md:grid-cols-2 gap-8 md:gap-16 items-start">
 
                     <!-- Left Column -->
                     <div class="md:sticky md:top-32 space-y-6">
                         <h2 class="reveal font-sans text-2xl sm:text-3xl md:text-4xl font-semibold text-obsidian tracking-tight">
                             Your questions, answered
                         </h2>
-                        <p class="reveal reveal-delay-1 text-subtle text-lg">
+                        <p class="reveal reveal-delay-1 text-subtle text-base sm:text-lg">
                             Get quick answers about our platform and how it works.
                         </p>
                         <div class="reveal reveal-delay-2">
@@ -1897,11 +1911,11 @@
                     </div>
 
                     <!-- Right Column: Accordion -->
-                    <div class="reveal reveal-delay-1 bg-white border border-border rounded-2xl p-4 md:p-6 space-y-3">
+                    <div class="reveal reveal-delay-1 bg-white border border-border rounded-2xl p-3 sm:p-4 md:p-6 space-y-3">
 
                         <!-- FAQ Item 1 -->
-                        <div class="faq-item bg-canvas rounded-xl p-5 cursor-pointer transition-all">
-                            <div class="flex items-center justify-between gap-4">
+                        <div class="faq-item bg-canvas rounded-xl p-3.5 sm:p-5 cursor-pointer transition-all">
+                            <div class="flex items-center justify-between gap-2 sm:gap-4">
                                 <h3 class="text-base font-medium text-obsidian">What is PopDB?</h3>
                                 <iconify-icon icon="solar:alt-arrow-down-linear" width="20" class="faq-chevron text-subtle"></iconify-icon>
                             </div>
@@ -1911,8 +1925,8 @@
                         </div>
 
                         <!-- FAQ Item 2 -->
-                        <div class="faq-item bg-canvas rounded-xl p-5 cursor-pointer transition-all">
-                            <div class="flex items-center justify-between gap-4">
+                        <div class="faq-item bg-canvas rounded-xl p-3.5 sm:p-5 cursor-pointer transition-all">
+                            <div class="flex items-center justify-between gap-2 sm:gap-4">
                                 <h3 class="text-base font-medium text-obsidian">How does pricing work?</h3>
                                 <iconify-icon icon="solar:alt-arrow-down-linear" width="20" class="faq-chevron text-subtle"></iconify-icon>
                             </div>
@@ -1922,8 +1936,8 @@
                         </div>
 
                         <!-- FAQ Item 3 -->
-                        <div class="faq-item bg-canvas rounded-xl p-5 cursor-pointer transition-all">
-                            <div class="flex items-center justify-between gap-4">
+                        <div class="faq-item bg-canvas rounded-xl p-3.5 sm:p-5 cursor-pointer transition-all">
+                            <div class="flex items-center justify-between gap-2 sm:gap-4">
                                 <h3 class="text-base font-medium text-obsidian">Do I need DevOps experience?</h3>
                                 <iconify-icon icon="solar:alt-arrow-down-linear" width="20" class="faq-chevron text-subtle"></iconify-icon>
                             </div>
@@ -1933,8 +1947,8 @@
                         </div>
 
                         <!-- FAQ Item 4 -->
-                        <div class="faq-item bg-canvas rounded-xl p-5 cursor-pointer transition-all">
-                            <div class="flex items-center justify-between gap-4">
+                        <div class="faq-item bg-canvas rounded-xl p-3.5 sm:p-5 cursor-pointer transition-all">
+                            <div class="flex items-center justify-between gap-2 sm:gap-4">
                                 <h3 class="text-base font-medium text-obsidian">Can I migrate my existing app to PopDB?</h3>
                                 <iconify-icon icon="solar:alt-arrow-down-linear" width="20" class="faq-chevron text-subtle"></iconify-icon>
                             </div>
@@ -1944,8 +1958,8 @@
                         </div>
 
                         <!-- FAQ Item 5 -->
-                        <div class="faq-item bg-canvas rounded-xl p-5 cursor-pointer transition-all">
-                            <div class="flex items-center justify-between gap-4">
+                        <div class="faq-item bg-canvas rounded-xl p-3.5 sm:p-5 cursor-pointer transition-all">
+                            <div class="flex items-center justify-between gap-2 sm:gap-4">
                                 <h3 class="text-base font-medium text-obsidian">What kind of support do you offer?</h3>
                                 <iconify-icon icon="solar:alt-arrow-down-linear" width="20" class="faq-chevron text-subtle"></iconify-icon>
                             </div>
@@ -1962,7 +1976,7 @@
         <!-- Simple Pricing -->
         <section id="pricing" class="py-12 sm:py-16 md:py-24 px-6 md:px-12 bg-canvas">
             <div class="max-w-5xl mx-auto">
-                <div class="text-center mb-16">
+                <div class="text-center mb-8 sm:mb-12 md:mb-16">
                     <h2 class="reveal font-sans text-2xl sm:text-3xl md:text-4xl font-semibold text-obsidian tracking-tight mb-4">
                         Progression over perfection.
                     </h2>
@@ -1973,7 +1987,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 max-w-2xl mx-auto">
                     <!-- Hobby -->
-                    <div class="reveal p-5 sm:p-6 md:p-8 rounded-2xl border border-border bg-white hover:border-obsidian/30 transition-colors">
+                    <div class="reveal p-4 sm:p-6 md:p-8 rounded-2xl border border-border bg-white hover:border-obsidian/30 transition-colors">
                         <div class="flex justify-between items-center mb-4">
                             <span class="font-semibold text-obsidian">Hobby</span>
                             <span class="text-xs font-mono bg-canvas border border-border px-2 py-1 rounded">FREE</span>
@@ -1997,7 +2011,7 @@
                     </div>
 
                     <!-- Pro -->
-                    <div class="reveal reveal-delay-1 p-5 sm:p-6 md:p-8 rounded-2xl border border-obsidian/10 bg-white shadow-xl shadow-gray-200/50 relative overflow-hidden">
+                    <div class="reveal reveal-delay-1 p-4 sm:p-6 md:p-8 rounded-2xl border border-obsidian/10 bg-white shadow-xl shadow-gray-200/50 relative overflow-hidden">
                         <div class="absolute top-0 inset-x-0 h-1 bg-obsidian"></div>
                         <div class="flex justify-between items-center mb-4">
                             <span class="font-semibold text-obsidian">Pro Builder</span>
@@ -2042,7 +2056,7 @@
                 <div class="text-[10px] text-border">&copy; 2025 PopDB Inc.</div>
             </div>
 
-            <div class="flex gap-10 md:gap-16">
+            <div class="flex gap-6 sm:gap-10 md:gap-16">
                 <div class="space-y-4">
                     <h4 class="text-xs font-semibold text-obsidian">Product</h4>
                     <ul class="space-y-2 text-xs text-subtle">
@@ -2154,7 +2168,7 @@
                     if (nextUserStep) {
                         demoInput.textContent = nextUserStep.text;
                         demoInput.classList.add('has-text');
-                        demoSend.classList.add('ready');
+                        if (!demoSend.classList.contains('pulse')) demoSend.classList.add('ready');
                     } else {
                         demoInput.textContent = 'Ask a question...';
                         demoInput.classList.remove('has-text');
@@ -2454,6 +2468,8 @@
                     const tabName = tab.dataset.tab;
                     if (tabName === activeTab) return;
 
+                    demoSend.classList.remove('pulse');
+
                     // Switch active tab visuals
                     demoTabBar.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
@@ -2746,50 +2762,51 @@
 
                     // Phase 3: Confetti burst from LIVE box + open deployed app
                     setTimeout(() => {
+                        // Fire confetti first — from the LIVE box position
                         const rect = deployLive.getBoundingClientRect();
                         const x = (rect.left + rect.width / 2) / window.innerWidth;
                         const y = (rect.top + rect.height / 2) / window.innerHeight;
 
-                        // Add RecipeBox tab to the demo window and switch to it
-                        if (!document.querySelector('[data-tab="recipe-app"]')) {
-                            const plusTab = demoTabBar.querySelector('.demo-tab:last-child');
-                            const recipeTab = document.createElement('div');
-                            recipeTab.className = 'demo-tab';
-                            recipeTab.dataset.tab = 'recipe-app';
-                            recipeTab.innerHTML = 'RecipeBox <iconify-icon icon="lucide:x" width="12"></iconify-icon>';
-                            demoTabBar.insertBefore(recipeTab, plusTab);
-                        }
-                        // Switch to the recipe-app tab
-                        demoTabBar.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
-                        document.querySelector('[data-tab="recipe-app"]').classList.add('active');
-                        activeTab = 'recipe-app';
-                        demoChat.style.display = 'none';
-                        document.querySelector('.demo-chat-bar').style.display = 'none';
-                        document.getElementById('demo-app-preview').style.display = 'flex';
-
-                        // Main burst
-                        confetti({
-                            particleCount: 80,
-                            spread: 70,
-                            origin: { x, y },
-                            colors: ['#10B981', '#34D399', '#6EE7B7', '#171717', '#3B82F6'],
-                            ticks: 120,
-                            gravity: 1.2,
-                            scalar: 0.9,
-                        });
-
-                        // Second smaller burst slightly delayed
-                        setTimeout(() => {
+                        try {
                             confetti({
-                                particleCount: 30,
-                                spread: 40,
-                                origin: { x: x + 0.02, y: y - 0.02 },
-                                colors: ['#10B981', '#A7F3D0', '#FFFFFF'],
-                                ticks: 80,
-                                gravity: 1.5,
-                                scalar: 0.7,
+                                particleCount: 200,
+                                spread: 100,
+                                origin: { x, y },
+                                colors: ['#10B981', '#34D399', '#6EE7B7', '#171717', '#3B82F6'],
+                                ticks: 300,
+                                gravity: 0.6,
+                                scalar: 1.1,
                             });
-                        }, 150);
+                            setTimeout(() => {
+                                confetti({
+                                    particleCount: 80,
+                                    spread: 60,
+                                    origin: { x: x + 0.02, y: y - 0.02 },
+                                    colors: ['#10B981', '#A7F3D0', '#FFFFFF'],
+                                    ticks: 200,
+                                    gravity: 0.8,
+                                    scalar: 0.9,
+                                });
+                            }, 200);
+                        } catch(e) { console.error('Confetti error:', e); }
+
+                        // Then switch to RecipeBox tab
+                        try {
+                            if (!document.querySelector('[data-tab="recipe-app"]')) {
+                                const plusTab = demoTabBar.querySelector('.demo-tab:last-child');
+                                const recipeTab = document.createElement('div');
+                                recipeTab.className = 'demo-tab';
+                                recipeTab.dataset.tab = 'recipe-app';
+                                recipeTab.innerHTML = 'RecipeBox <iconify-icon icon="lucide:x" width="12"></iconify-icon>';
+                                demoTabBar.insertBefore(recipeTab, plusTab);
+                            }
+                            demoTabBar.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
+                            document.querySelector('[data-tab="recipe-app"]').classList.add('active');
+                            activeTab = 'recipe-app';
+                            demoChat.style.display = 'none';
+                            document.querySelector('.demo-chat-bar').style.display = 'none';
+                            document.getElementById('demo-app-preview').style.display = 'flex';
+                        } catch(e) { console.error('Tab switch error:', e); }
                     }, 1200);
 
                     // Phase 4: Reset after hold

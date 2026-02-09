@@ -2818,13 +2818,13 @@
                 });
             }
 
-            // Interactive Whoops (Backup Rollback) Button
+            // Interactive Whoops (Backup Rollback) — hover-driven looping animation
             const whoopsBtn = document.getElementById('whoops-btn');
             const backupNow = document.getElementById('backup-now');
             const backupTimeline = document.getElementById('backup-timeline');
 
             if (whoopsBtn && backupNow && backupTimeline) {
-                let rewinding = false;
+                const backupCard = backupTimeline.closest('.group');
                 const whoopsLabel = document.getElementById('whoops-label');
                 const oopsPhrases = [
                     'Whoops', 'Oopsie', 'My bad', 'Sorry', 'Uh-oh', 'Aw, crap',
@@ -2837,36 +2837,68 @@
                     'Fantastic', 'Crap', 'S***', 'D*** it', 'F*** me'
                 ];
                 let phraseIndex = 0;
+                let hovering = false;
+                let animating = false;
+                let cycleTimers = [];
 
-                whoopsBtn.addEventListener('click', () => {
-                    if (rewinding) return;
-                    rewinding = true;
-                    whoopsBtn.disabled = true;
+                function clearCycleTimers() {
+                    cycleTimers.forEach(id => clearTimeout(id));
+                    cycleTimers = [];
+                }
+
+                function runCycle() {
+                    if (animating) return;
+                    animating = true;
+
+                    // Phase 1: Button press + text change + ball slides back
+                    whoopsBtn.style.transform = 'scale(0.95)';
                     whoopsBtn.style.opacity = '0.6';
-
-                    // Cycle through phrases top to bottom
                     if (whoopsLabel) whoopsLabel.textContent = oopsPhrases[phraseIndex];
                     phraseIndex = (phraseIndex + 1) % oopsPhrases.length;
 
-                    // Calculate gap between Now dot and previous dot
                     const dots = backupTimeline.querySelectorAll('.backup-dot');
                     const nowRect = backupNow.getBoundingClientRect();
                     const prevDot = dots[1];
                     const prevRect = prevDot.getBoundingClientRect();
                     const shift = (prevRect.left + prevRect.width / 2) - (nowRect.left + nowRect.width / 2);
-
-                    // Hop back
                     backupNow.style.transform = `translateX(${shift}px)`;
 
-                    // Reset after 2s
-                    setTimeout(() => {
+                    // Phase 2: After slide + hold, ball returns
+                    const t1 = setTimeout(() => {
                         backupNow.style.transform = 'translateX(0)';
-                        setTimeout(() => {
-                            whoopsBtn.disabled = false;
+                        // Phase 3: Ball back, release button
+                        const t2 = setTimeout(() => {
+                            whoopsBtn.style.transform = '';
                             whoopsBtn.style.opacity = '1';
-                            rewinding = false;
+                            // Phase 4: Rest, then maybe loop
+                            const t3 = setTimeout(() => {
+                                animating = false;
+                                if (hovering) runCycle();
+                            }, 1000);
+                            cycleTimers.push(t3);
                         }, 500);
-                    }, 2000);
+                        cycleTimers.push(t2);
+                    }, 1500);
+                    cycleTimers.push(t1);
+                }
+
+                if (backupCard) {
+                    backupCard.addEventListener('mouseenter', () => {
+                        hovering = true;
+                        const tStart = setTimeout(() => {
+                            if (hovering) runCycle();
+                        }, 300);
+                        cycleTimers.push(tStart);
+                    });
+
+                    backupCard.addEventListener('mouseleave', () => {
+                        hovering = false;
+                    });
+                }
+
+                whoopsBtn.addEventListener('click', () => {
+                    if (animating) return;
+                    runCycle();
                 });
             }
 

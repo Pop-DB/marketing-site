@@ -275,6 +275,10 @@
                         border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
                         box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        .feature-card img {
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
         .feature-card.active {
             flex: 2.5;
             background: rgba(255, 255, 255, 0.95);
@@ -1047,7 +1051,7 @@
     <main class="relative z-10 flex flex-col w-full">
 
         <!-- Hero Section -->
-        <section class="relative min-h-[90vh] flex flex-col items-center justify-center pt-24 sm:pt-32 pb-12 sm:pb-20 px-6 md:px-12">
+        <section class="relative flex flex-col items-center justify-center pt-24 sm:pt-28 pb-6 sm:pb-8 px-6 md:px-12">
             <div class="max-w-3xl text-center space-y-6 sm:space-y-8 relative z-10">
 
 
@@ -1072,7 +1076,91 @@
                     </button>
                 </div>
             </div>
+        </section>
 
+        <!-- Top 3 Features (Expanding Accordion) -->
+        <section class="py-6 sm:py-8 md:py-10 px-4 sm:px-6 md:px-12 border-y border-border/50 bg-canvas/50">
+            <div class="max-w-7xl mx-auto">
+                <div id="feature-accordion" class="flex flex-col md:flex-row gap-4 items-stretch">
+
+                    <!-- Card 1: Start Building Now -->
+                    <div class="reveal feature-card active" data-feature="0">
+                        <div class="flex items-center gap-3 sm:gap-4 md:gap-6">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-start gap-4">
+                                    <span class="feature-number font-mono text-sm font-medium mt-0.5">01</span>
+                                    <div>
+                                        <h3 class="font-sans text-lg font-semibold text-obsidian mb-1">Start Building Now</h3>
+                                        <p class="font-sans text-sm text-subtle leading-relaxed">
+                                            PopDB comes with a simple but powerful app builder that helps you start building apps even with no prior experience.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="feature-image-wrap">
+                                <div class="feature-image-inner">
+                                    <div class="rounded-2xl border border-border/50 overflow-hidden w-24 h-24 sm:w-40 sm:h-40 md:w-56 md:h-56 shrink-0">
+                                        <img src="Dark backgrounds Carousel/Startbuilding dark background.png" alt="Quick Setup Guide" class="w-full h-full object-cover block" width="224" height="224" decoding="async">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Private Database -->
+                    <div class="reveal reveal-delay-1 feature-card" data-feature="1">
+                        <div class="flex items-center gap-3 sm:gap-4 md:gap-6">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-start gap-4">
+                                    <span class="feature-number font-mono text-sm font-medium mt-0.5">02</span>
+                                    <div>
+                                        <h3 class="font-sans text-lg font-semibold text-obsidian mb-1">Private Database</h3>
+                                        <p class="font-sans text-sm text-subtle leading-relaxed">
+                                            Every app connected to PopDB gets a dedicated database, private and fully under your control.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="feature-image-wrap">
+                                <div class="feature-image-inner">
+                                    <div class="rounded-2xl border border-border/50 overflow-hidden w-24 h-24 sm:w-40 sm:h-40 md:w-56 md:h-56 shrink-0">
+                                        <img src="Dark backgrounds Carousel/Databases Darkbackground.png" alt="Private Database" class="w-full h-full object-cover block" width="224" height="224" decoding="async">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Managed Hosting -->
+                    <div class="reveal reveal-delay-2 feature-card" data-feature="2">
+                        <div class="flex items-center gap-3 sm:gap-4 md:gap-6">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-start gap-4">
+                                    <span class="feature-number font-mono text-sm font-medium mt-0.5">03</span>
+                                    <div>
+                                        <h3 class="font-sans text-lg font-semibold text-obsidian mb-1">Managed Hosting</h3>
+                                        <p class="font-sans text-sm text-subtle leading-relaxed">
+                                            PopDB handles hosting so your app is easy to deploy, reliable, and secure without maintenance.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="feature-image-wrap">
+                                <div class="feature-image-inner">
+                                    <div class="rounded-2xl border border-border/50 overflow-hidden w-24 h-24 sm:w-40 sm:h-40 md:w-56 md:h-56 shrink-0">
+                                        <img src="Dark backgrounds Carousel/Managed Hosting Dark Background.png" alt="Managed Hosting" class="w-full h-full object-cover block" width="224" height="224" decoding="async" style="object-position: left center;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Desktop Demo Section -->
+        <section class="relative py-8 sm:py-12 px-6 md:px-12">
             <!-- Hero Visual: Desktop with Draggable Window -->
             <div class="reveal reveal-delay-4 mt-12 sm:mt-16 md:mt-20 w-full max-w-5xl mx-auto">
                 <div id="hero-desktop" class="hidden md:block">
@@ -1303,87 +1391,6 @@
                             loading="lazy"
                         >
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Top 3 Features (Expanding Accordion) -->
-        <section class="py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-12 border-y border-border/50 bg-canvas/50">
-            <div class="max-w-7xl mx-auto">
-                <div id="feature-accordion" class="flex flex-col md:flex-row gap-4 items-stretch">
-
-                    <!-- Card 1: Start Building Now -->
-                    <div class="reveal feature-card active" data-feature="0">
-                        <div class="flex items-center gap-3 sm:gap-4 md:gap-6">
-                            <div class="flex-1 min-w-0">
-                                <div class="flex items-start gap-4">
-                                    <span class="feature-number font-mono text-sm font-medium mt-0.5">01</span>
-                                    <div>
-                                        <h3 class="font-sans text-lg font-semibold text-obsidian mb-1">Start Building Now</h3>
-                                        <p class="font-sans text-sm text-subtle leading-relaxed">
-                                            PopDB comes with a simple but powerful app builder that helps you start building apps even with no prior experience.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="feature-image-wrap">
-                                <div class="feature-image-inner">
-                                    <div class="rounded-2xl border border-border/50 overflow-hidden w-20 h-20 sm:w-32 sm:h-32 md:w-44 md:h-44 shrink-0">
-                                        <img src="Dark backgrounds Carousel/Startbuilding dark background.png" alt="Quick Setup Guide" class="w-full h-full object-cover block">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 2: Private Database -->
-                    <div class="reveal reveal-delay-1 feature-card" data-feature="1">
-                        <div class="flex items-center gap-3 sm:gap-4 md:gap-6">
-                            <div class="flex-1 min-w-0">
-                                <div class="flex items-start gap-4">
-                                    <span class="feature-number font-mono text-sm font-medium mt-0.5">02</span>
-                                    <div>
-                                        <h3 class="font-sans text-lg font-semibold text-obsidian mb-1">Private Database</h3>
-                                        <p class="font-sans text-sm text-subtle leading-relaxed">
-                                            Every app connected to PopDB gets a dedicated database, private and fully under your control.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="feature-image-wrap">
-                                <div class="feature-image-inner">
-                                    <div class="rounded-2xl border border-border/50 overflow-hidden w-20 h-20 sm:w-32 sm:h-32 md:w-44 md:h-44 shrink-0">
-                                        <img src="Dark backgrounds Carousel/Databases Darkbackground.png" alt="Private Database" class="w-full h-full object-cover block">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 3: Managed Hosting -->
-                    <div class="reveal reveal-delay-2 feature-card" data-feature="2">
-                        <div class="flex items-center gap-3 sm:gap-4 md:gap-6">
-                            <div class="flex-1 min-w-0">
-                                <div class="flex items-start gap-4">
-                                    <span class="feature-number font-mono text-sm font-medium mt-0.5">03</span>
-                                    <div>
-                                        <h3 class="font-sans text-lg font-semibold text-obsidian mb-1">Managed Hosting</h3>
-                                        <p class="font-sans text-sm text-subtle leading-relaxed">
-                                            PopDB handles hosting so your app is easy to deploy, reliable, and secure without maintenance.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="feature-image-wrap">
-                                <div class="feature-image-inner">
-                                    <div class="rounded-2xl border border-border/50 overflow-hidden w-20 h-20 sm:w-32 sm:h-32 md:w-44 md:h-44 shrink-0">
-                                        <img src="Dark backgrounds Carousel/Managed Hosting Dark Background.png" alt="Managed Hosting" class="w-full h-full object-cover block" style="object-position: left center;">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </section>
@@ -1942,7 +1949,7 @@
                                 <iconify-icon icon="solar:alt-arrow-down-linear" width="20" class="faq-chevron text-subtle"></iconify-icon>
                             </div>
                             <div class="faq-answer">
-                                <p class="text-sm text-subtle leading-relaxed">Not at all. PopDB is built for developers and vibe coders alike. Our CLI handles deployments, and the dashboard gives you full visibility — no infrastructure expertise needed.</p>
+                                <p class="text-sm text-subtle leading-relaxed">Not at all. PopDB is designed to be used by people who cannot code.</p>
                             </div>
                         </div>
 
@@ -2760,35 +2767,9 @@
                         }
                     }, 800);
 
-                    // Phase 3: Confetti burst from LIVE box + open deployed app
+                    // Phase 3: Open deployed app (confetti disabled)
                     setTimeout(() => {
-                        // Fire confetti first — from the LIVE box position
-                        const rect = deployLive.getBoundingClientRect();
-                        const x = (rect.left + rect.width / 2) / window.innerWidth;
-                        const y = (rect.top + rect.height / 2) / window.innerHeight;
-
-                        try {
-                            confetti({
-                                particleCount: 200,
-                                spread: 100,
-                                origin: { x, y },
-                                colors: ['#10B981', '#34D399', '#6EE7B7', '#171717', '#3B82F6'],
-                                ticks: 300,
-                                gravity: 0.6,
-                                scalar: 1.1,
-                            });
-                            setTimeout(() => {
-                                confetti({
-                                    particleCount: 80,
-                                    spread: 60,
-                                    origin: { x: x + 0.02, y: y - 0.02 },
-                                    colors: ['#10B981', '#A7F3D0', '#FFFFFF'],
-                                    ticks: 200,
-                                    gravity: 0.8,
-                                    scalar: 0.9,
-                                });
-                            }, 200);
-                        } catch(e) { console.error('Confetti error:', e); }
+                        // Confetti removed per user request
 
                         // Then switch to RecipeBox tab
                         try {

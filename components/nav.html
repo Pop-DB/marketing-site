@@ -1,4 +1,4 @@
-<header class="fixed top-0 left-0 right-0 z-50 w-full px-6 py-4 md:px-12 flex justify-between items-center glass-panel transition-all duration-300">
+<header class="fixed top-0 left-0 right-0 z-50 w-full px-6 py-4 md:px-12 flex items-center glass-panel transition-all duration-300">
     <a href="/" class="flex items-center gap-2 no-underline">
         <div class="w-8 h-8 bg-obsidian text-white flex items-center justify-center rounded-lg shadow-soft">
             <iconify-icon icon="solar:bolt-linear" width="18" stroke-width="1.5"></iconify-icon>
@@ -8,13 +8,12 @@
         </span>
     </a>
 
-    <nav class="hidden md:flex items-center gap-8">
+    <nav class="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
         <a href="/" class="font-sans text-xs font-medium text-subtle hover:text-obsidian transition-colors">Home</a>
         <a href="/#pricing" class="font-sans text-xs font-medium text-subtle hover:text-obsidian transition-colors">Pricing</a>
-        <a href="#" class="font-sans text-xs font-medium text-subtle hover:text-obsidian transition-colors">Docs</a>
     </nav>
 
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-4 ml-auto">
         <a href="#" class="hidden md:block font-sans text-xs font-medium text-subtle hover:text-obsidian transition-colors">Sign in</a>
         <button class="group relative overflow-hidden bg-obsidian text-white text-xs font-medium px-5 py-2 rounded-lg shadow-soft hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
             <div class="shimmer"></div>

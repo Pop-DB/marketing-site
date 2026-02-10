@@ -3,7 +3,9 @@
 ## App Overview
 This is the marketing landing page for PopDB - a backend platform designed for vibe coders, indie hackers, and solopreneurs. The site showcases PopDB's features including databases, authentication, hosting, and REST APIs.
 
-**Current Status**: The project has been initialized with React/TypeScript/Vite. The original HTML landing page (3000+ lines with complex JavaScript interactions) is being progressively converted to React components.
+**Current Status**: The site is built as a static HTML landing page (`index.html`) with ~3000 lines of interactive JavaScript. This HTML site is the **main product** and primary focus for all development work.
+
+**Note**: There is also a React/TypeScript/Vite setup in the `src/` directory from an earlier conversion attempt, but this is **secondary/deprecated**. All active development should focus on the HTML site.
 
 ## Key Features
 - Responsive landing page with black and white theme
@@ -16,140 +18,157 @@ This is the marketing landing page for PopDB - a backend platform designed for v
 
 ## Tech Stack
 
-### Frontend
-- **React 19** - UI framework
-- **TypeScript** - Type safety
-- **Vite** - Build tool and dev server
-- **React Router DOM** - Client-side routing
-- **Tailwind CSS v4** - Utility-first styling with custom theme
+### Main Site (HTML)
+- **HTML5** - Static landing page structure
+- **Vanilla JavaScript** - Interactive features and animations
+- **Tailwind CSS** - Utility-first styling with CDN
+- **Iconify** - Icon system via CDN
+- **canvas-confetti** - Deployment celebration effects
 
 ### Styling
 - Custom color palette: canvas (#FAFAFA), surface (#FFFFFF), obsidian (#171717), subtle (#737373), border (#E5E5E5), accent (#3B82F6)
 - Custom fonts: Inter (sans), JetBrains Mono (mono)
-- Custom animations: marquee scrolling, fade-in-up reveals
+- Custom animations: marquee scrolling, fade-in-up reveals, scroll reveals
 - Glassmorphism effects
 
-### Backend
+### React Setup (Secondary/Deprecated)
+- React 19, TypeScript, Vite, React Router DOM
+- **Note**: This is from an earlier conversion attempt and is not actively maintained
+
+### Backend (Future)
 - **PopDB** - PostgreSQL database with Auth and REST API (when database is created)
 
 ## Project Structure
 
 ```
 popdb-black-and-white-website/
+├── index.html                        # ⭐ MAIN LANDING PAGE (~3000 lines)
+├── use-cases/
+│   ├── indie-hackers.html           # Use case page for indie hackers
+│   ├── solopreneur.html             # Use case page for solopreneurs
+│   └── vibe-coder.html              # Use case page for vibe coders
+├── recipe-app.html                   # Recipe app demo page
 ├── public/
 │   ├── Black and White Marketing gifs/
 │   ├── Black and White Website photos/
 │   ├── Dark backgrounds Carousel/
 │   ├── Background Breakpoint image/
 │   └── *.png (various image assets)
-├── src/
-│   ├── components/          # Reusable React components (to be created)
+├── src/                              # (React code - secondary/deprecated)
+│   ├── components/
 │   ├── pages/
-│   │   ├── Home.tsx        # Main landing page
-│   │   ├── RecipeApp.tsx   # Recipe app demo
-│   │   └── use-cases/
-│   │       ├── IndieHackers.tsx
-│   │       ├── Solopreneur.tsx
-│   │       └── VibeCoder.tsx
-│   ├── App.tsx             # Main app with routing
-│   ├── main.tsx            # App entry point
-│   └── index.css           # Global styles and Tailwind imports
-├── tailwind.config.js      # Tailwind configuration
-├── postcss.config.js       # PostCSS configuration
-├── vite.config.ts          # Vite configuration
-├── package.json            # Dependencies
-└── tsconfig.json           # TypeScript configuration
+│   ├── App.tsx
+│   ├── main.tsx
+│   └── index.css
+├── tailwind.config.js                # (For React build)
+├── postcss.config.js                 # (For React build)
+├── vite.config.ts                    # (For React build)
+├── package.json
+└── tsconfig.json
 ```
 
 ## Development Commands
 
-### Install Dependencies
+### HTML Site (Main Product)
+The HTML site can be opened directly in a browser:
+- Open `index.html` in your browser, or
+- Use a local server: `python3 -m http.server 8000` then visit `http://localhost:8000`
+
+### React Build (Secondary/Deprecated)
+If you need to work with the React version:
+
 ```bash
+# Install dependencies
 npm install
-```
 
-### Start Development Server
-```bash
+# Start dev server (http://localhost:5173)
 npm run dev
-```
-The site will be available at http://localhost:5173
 
-### Build for Production
-```bash
+# Build for production
 npm run build
-```
-This creates an optimized production build in the `dist/` directory.
 
-### Preview Production Build
-```bash
+# Preview production build
 npm run preview
-```
 
-### Lint Code
-```bash
+# Lint code
 npm run lint
 ```
 
 ## Deployment
 
-### Deploy to PopDB Hosting
-Once the PopDB database is created, deploy using:
+### Deploy HTML Site to PopDB Hosting
+Deploy the HTML site directly:
+```bash
+# Use PopDB MCP tools to deploy the root directory containing index.html
+# The app will be hosted at: popdb-black-and-white-website.bryan-1.apps.popdb.click
+```
+
+Alternatively, if using the React build:
 ```bash
 npm run build
 # Then use PopDB MCP tools to deploy the dist/ folder
 ```
 
-The app will be hosted at: `popdb-black-and-white-website.bryan-1.apps.popdb.click` (or similar)
-
 ## Original Source
-The original static HTML site is located at:
+The original static HTML site was located at:
 `/Users/bryanoki/Code/Builder App Focused - Black and White PopDB copy/`
 
-This React version is a conversion of that HTML site.
+The current `index.html` is based on that original HTML site.
 
-## Next Steps (Progressive Enhancement)
+## HTML Site Architecture
 
-The current implementation includes:
-- ✅ React/TypeScript/Vite setup
-- ✅ Tailwind CSS configuration with custom theme
-- ✅ Image assets copied to public/
-- ✅ Routing structure with React Router
-- ✅ Basic page components (placeholders)
+The main `index.html` file (~3000 lines) contains:
+- ✅ Responsive navigation with dropdown menus
+- ✅ Hero section with interactive demo (tabbed chat interface)
+- ✅ Feature cards with hover effects
+- ✅ Marquee scrolling sections
+- ✅ Scroll reveal animations
+- ✅ Canvas confetti effects on deployment
+- ✅ Footer (currently minimal - logo only)
+- ✅ Tailwind CSS styling via CDN
+- ✅ Iconify icons via CDN
 
-### To Complete the Conversion:
+### Working with the HTML Site
 
-1. **Convert Hero Section** - Extract the hero/banner from index.html into a Hero component
-2. **Convert Features** - Create feature card components with hover animations
-3. **Convert Interactive Demo** - Port the deployment animation JavaScript to React state/effects
-4. **Add Navigation** - Create Navbar component with dropdown menus
-5. **Add Footer** - Extract footer from HTML
-6. **Port Animations** - Convert scroll reveal and marquee animations to React
-7. **Add Confetti Integration** - Set up canvas-confetti for deployment interactions
-8. **Convert Use Case Pages** - Port the full content from the use-cases/*.html files
-9. **Convert Recipe App Page** - Port recipe-app.html content
+All JavaScript is inline in `index.html`. Key interactive features:
+- Hero demo with tabbed sequences (schema, integrations, teammates)
+- Deployment button with confetti animation
+- Scroll-triggered reveal animations
+- Marquee hover pause/resume effects
 
-The HTML is extensive (~3000 lines) with complex JavaScript interactions. The conversion can be done incrementally, starting with the most important sections first.
+When making changes:
+1. Edit `index.html` directly
+2. Test in browser (open file or use local server)
+3. Check responsive behavior (mobile, tablet, desktop)
 
 ## Troubleshooting
 
-### Tailwind Classes Not Working
+### HTML Site Issues
+
+**Images Not Loading:**
+- Images in public/ are accessible via relative paths: `public/filename.png`
+- For subdirectories: `public/Black and White Marketing gifs/filename.gif`
+- Check browser console for 404 errors
+
+**Tailwind Classes Not Working:**
+- The HTML site uses Tailwind CSS via CDN (check `<script>` tags in `<head>`)
+- Ensure the Tailwind CDN script is loaded
+- Custom colors are defined in the inline config
+
+**JavaScript Errors:**
+- Open browser console to see errors
+- Most JavaScript is inline in `<script>` tags at the bottom of `index.html`
+
+### React Build Issues (if needed)
+
+**Tailwind Classes Not Working:**
 - Make sure `npm run dev` is running
 - Check that `tailwind.config.js` content paths include your components
 - Verify `@import 'tailwindcss';` is at the top of `src/index.css`
 
-### Routing 404 Errors
+**Routing 404 Errors:**
 - Use `<Link>` from react-router-dom instead of `<a>` tags
 - Ensure all routes are defined in `src/App.tsx`
-
-### Images Not Loading
-- Images in public/ are accessible via `/filename.ext` in src code
-- For images in subdirectories: `/Black and White Marketing gifs/filename.gif`
-
-### PopDB Database Creation Error
-If you get "Internal Server Error" when creating the database:
-- Try a different database name (alphanumeric, underscores only)
-- Check PopDB service status
-- The app can still be developed locally without the database
 
 ## Updating This File
 

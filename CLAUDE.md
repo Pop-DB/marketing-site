@@ -37,17 +37,29 @@ The site is deployed to PopDB hosting:
 - **Custom Domain:** www.popdb.ai
 
 ### Build & Deploy
-The build process copies static files to the `dist/` folder:
+
+Build the site by copying all static files to the `dist/` folder:
 
 ```bash
-# Build (copies files to dist/)
+# Build the site
 npm run build
+# or
+./build.sh
 
-# Deploy to PopDB (using MCP tools)
-mcp__popdb__deploy_app(app_id="popdbsite", dist_path="<path>/dist")
+# Clean dist folder
+npm run clean
 ```
 
-**Note:** Since the React app was removed, `npm run build` is no longer available. To deploy, manually copy files to a dist folder or deploy the root directory directly.
+The build script copies:
+- HTML files (index.html, recipe-app.html)
+- Directories (use-cases/, components/, public/)
+- Image assets (*.png, *.jpg, *.gif and asset folders)
+
+**Deploy to PopDB:**
+```bash
+# After building, deploy using MCP tools
+mcp__popdb__deploy_app(app_id="popdbsite", dist_path="<path>/dist")
+```
 
 ## Key Features
 - Responsive landing page with black and white theme

@@ -1,0 +1,12 @@
+{
+  "name": "popdb-website",
+  "version": "1.0.0",
+  "description": "PopDB marketing website - static HTML",
+  "scripts": {
+    "build": "./build.sh",
+    "clean": "rm -rf dist"
+  },
+  "keywords": ["popdb", "marketing", "static"],
+  "author": "",
+  "license": "ISC"
+}

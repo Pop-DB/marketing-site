@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "PopDB marketing website - static HTML",
   "scripts": {
+    "dev": "npx serve .",
     "build": "./build.sh",
     "clean": "rm -rf dist"
   },

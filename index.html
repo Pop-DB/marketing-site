@@ -1157,15 +1157,25 @@
     <!-- Background Grid -->
     <div class="fixed inset-0 z-0 technical-grid pointer-events-none"></div>
 
-    <!-- Navigation (shared) -->
-    <div id="nav-placeholder"></div>
-    <script>
-      fetch('/components/nav.html')
-        .then((r) => r.text())
-        .then((html) => {
-          document.getElementById('nav-placeholder').outerHTML = html;
-        });
-    </script>
+    <!-- Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 w-full px-6 py-4 md:px-12 flex items-center glass-panel transition-all duration-300">
+        <a href="/" class="flex items-center gap-2 no-underline">
+            <img src="/public/logo.png" alt="PopDB" class="w-[50px] h-[50px] rounded-xl" />
+        </a>
+
+        <nav class="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+            <a href="/" class="font-sans text-xs font-medium text-subtle hover:text-obsidian transition-colors">Home</a>
+            <a href="/#pricing" class="font-sans text-xs font-medium text-subtle hover:text-obsidian transition-colors">Pricing</a>
+        </nav>
+
+        <div class="flex items-center gap-4 ml-auto">
+            <a href="https://workspaces.popdb.ai" class="hidden md:block font-sans text-xs font-medium text-subtle hover:text-obsidian transition-colors">Sign in</a>
+            <a href="https://workspaces.popdb.ai" class="group relative overflow-hidden bg-obsidian text-white text-xs font-medium px-5 py-2 rounded-lg shadow-soft hover:shadow-lg hover:scale-[1.02] transition-all duration-300 inline-block">
+                <div class="shimmer"></div>
+                <span class="relative z-10">Start Building</span>
+            </a>
+        </div>
+    </header>
 
     <!-- Main Content -->
     <main class="relative z-10 flex flex-col w-full">
@@ -1250,7 +1260,7 @@
                       class="rounded-2xl border border-border/50 overflow-hidden w-24 h-24 sm:w-40 sm:h-40 md:w-56 md:h-56 shrink-0"
                     >
                       <img
-                        src="Dark backgrounds Carousel/Startbuilding dark background.png"
+                        src="public/Dark backgrounds Carousel/Startbuilding dark background.png"
                         alt="Quick Setup Guide"
                         class="w-full h-full object-cover block"
                         width="224"
@@ -1291,7 +1301,7 @@
                       class="rounded-2xl border border-border/50 overflow-hidden w-24 h-24 sm:w-40 sm:h-40 md:w-56 md:h-56 shrink-0"
                     >
                       <img
-                        src="Dark backgrounds Carousel/Databases Darkbackground.png"
+                        src="public/Dark backgrounds Carousel/Databases Darkbackground.png"
                         alt="Private Database"
                         class="w-full h-full object-cover block"
                         width="224"
@@ -1332,7 +1342,7 @@
                       class="rounded-2xl border border-border/50 overflow-hidden w-24 h-24 sm:w-40 sm:h-40 md:w-56 md:h-56 shrink-0"
                     >
                       <img
-                        src="Dark backgrounds Carousel/Managed Hosting Dark Background.png"
+                        src="public/Dark backgrounds Carousel/Managed Hosting Dark Background.png"
                         alt="Managed Hosting"
                         class="w-full h-full object-cover block"
                         width="224"
@@ -1750,7 +1760,7 @@
               </div>
               <!-- Screenshot -->
               <img
-                src="Background Breakpoint image/App Demo Builder photo for break point on website.png"
+                src="public/Background Breakpoint image/App Demo Builder photo for break point on website.png"
                 alt="PopDB app builder demo showing AI chat, database schema, and managed hosting"
                 class="w-full h-auto block"
                 loading="lazy"
@@ -2061,7 +2071,7 @@
                 >
                   <img
                     id="security-gif-img"
-                    src="Black and White Marketing gifs/gandalf-you-shall-not-past.gif"
+                    src="public/Black and White Marketing gifs/gandalf-you-shall-not-past.gif"
                     class="w-full h-full object-cover rounded-lg"
                     alt="Security GIF"
                   />
@@ -2094,27 +2104,27 @@
                 class="w-[70%] mx-auto aspect-square relative bg-canvas rounded-lg border border-border/50"
               >
                 <img
-                  src="Black and White Website photos/The_Great_Wave_off_Kanagawa.jpg"
+                  src="public/Black and White Website photos/The_Great_Wave_off_Kanagawa.jpg"
                   class="storage-photo active absolute inset-0 w-full h-full object-contain rounded-lg border border-border shadow-sm"
                   alt="Great Wave"
                 />
                 <img
-                  src="Black and White Website photos/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg"
+                  src="public/Black and White Website photos/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg"
                   class="storage-photo absolute inset-0 w-full h-full object-contain rounded-lg border border-border shadow-sm"
                   alt="Starry Night"
                 />
                 <img
-                  src="Black and White Website photos/Adams_The_Tetons_and_the_Snake_River.jpg"
+                  src="public/Black and White Website photos/Adams_The_Tetons_and_the_Snake_River.jpg"
                   class="storage-photo absolute inset-0 w-full h-full object-contain rounded-lg border border-border shadow-sm"
                   alt="Tetons"
                 />
                 <img
-                  src="Black and White Website photos/Screenshot_2026-02-07_at_12.00.31_AM.png"
+                  src="public/Black and White Website photos/Screenshot_2026-02-07_at_12.00.31_AM.png"
                   class="storage-photo absolute inset-0 w-full h-full object-contain rounded-lg border border-border shadow-sm"
                   alt="Screenshot 1"
                 />
                 <img
-                  src="Black and White Website photos/Screenshot_2026-02-07_at_12.04.46_AM.png"
+                  src="public/Black and White Website photos/Screenshot_2026-02-07_at_12.04.46_AM.png"
                   class="storage-photo absolute inset-0 w-full h-full object-contain rounded-lg border border-border shadow-sm"
                   alt="Screenshot 2"
                 />
@@ -4686,11 +4696,11 @@
         const securityVisual = document.getElementById('security-visual');
         if (securityVisual) {
           const securityGifs = [
-            'Black and White Marketing gifs/gandalf-you-shall-not-past.gif',
-            'Black and White Marketing gifs/ship it jurassic park GIF.gif',
-            'Black and White Marketing gifs/I Dont Think So No Way GIF.gif',
-            'Black and White Marketing gifs/No Way Bird GIF.gif',
-            'Black and White Marketing gifs/National Basketball Association Sport GIF by Milwaukee Bucks.gif',
+            'public/Black and White Marketing gifs/gandalf-you-shall-not-past.gif',
+            'public/Black and White Marketing gifs/ship it jurassic park GIF.gif',
+            'public/Black and White Marketing gifs/I Dont Think So No Way GIF.gif',
+            'public/Black and White Marketing gifs/No Way Bird GIF.gif',
+            'public/Black and White Marketing gifs/National Basketball Association Sport GIF by Milwaukee Bucks.gif',
           ];
           let gifIndex = 0;
           const gifImg = document.getElementById('security-gif-img');

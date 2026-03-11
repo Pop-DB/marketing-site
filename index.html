@@ -3169,6 +3169,132 @@
         </div>
       </section>
 
+      <!-- App Gallery Section -->
+      <section id="gallery" class="py-16 sm:py-24 md:py-32 px-6 md:px-12 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+          <!-- Header -->
+          <div class="mb-8 sm:mb-12 md:mb-16 max-w-2xl">
+            <h2 class="reveal font-sans text-2xl sm:text-3xl md:text-4xl font-semibold text-obsidian tracking-tight mb-4">
+              See what others are building
+            </h2>
+            <p class="reveal reveal-delay-1 text-subtle text-base sm:text-lg">
+              Real apps and agents built by our community using PopDB.
+            </p>
+          </div>
+
+          <!-- Gallery Container -->
+          <div class="relative">
+            <!-- Left Arrow -->
+            <button
+              id="gallery-prev"
+              class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 bg-white border border-border rounded-full flex items-center justify-center shadow-lg hover:shadow-xl hover:border-obsidian/20 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed hidden md:flex"
+            >
+              <iconify-icon icon="solar:arrow-left-linear" width="20" class="text-obsidian"></iconify-icon>
+            </button>
+
+            <!-- Scrollable Gallery -->
+            <div
+              id="gallery-scroll"
+              class="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4 -mx-6 px-6 md:mx-0 md:px-0"
+              style="scrollbar-width: none; -ms-overflow-style: none;"
+            >
+              <!-- App Card 1: Frogger -->
+              <a
+                href="https://frogger.bryoki.apps.popdb.ai/"
+                target="_blank"
+                class="flex-shrink-0 w-[280px] sm:w-[320px] md:w-[360px] group"
+              >
+                <div class="rounded-2xl border border-border bg-canvas overflow-hidden hover:shadow-xl hover:border-obsidian/20 transition-all duration-300">
+                  <!-- Screenshot placeholder -->
+                  <div class="aspect-[16/10] bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
+                    <div class="text-center">
+                      <iconify-icon icon="solar:gamepad-bold" width="48" class="text-green-600 mb-2"></iconify-icon>
+                      <p class="text-sm text-green-700 font-medium">Frogger Game</p>
+                    </div>
+                  </div>
+                  <!-- Card Footer -->
+                  <div class="p-4 bg-white">
+                    <h3 class="font-semibold text-obsidian text-sm mb-1 group-hover:text-accent transition-colors">Frogger</h3>
+                    <p class="text-xs text-subtle">Classic arcade game remake</p>
+                  </div>
+                </div>
+              </a>
+
+              <!-- App Card 2: Placeholder -->
+              <div class="flex-shrink-0 w-[280px] sm:w-[320px] md:w-[360px]">
+                <div class="rounded-2xl border border-border bg-canvas overflow-hidden hover:shadow-xl hover:border-obsidian/20 transition-all duration-300">
+                  <div class="aspect-[16/10] bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+                    <div class="text-center">
+                      <iconify-icon icon="solar:chart-bold" width="48" class="text-blue-600 mb-2"></iconify-icon>
+                      <p class="text-sm text-blue-700 font-medium">Analytics Dashboard</p>
+                    </div>
+                  </div>
+                  <div class="p-4 bg-white">
+                    <h3 class="font-semibold text-obsidian text-sm mb-1">Analytics Dashboard</h3>
+                    <p class="text-xs text-subtle">Real-time metrics visualization</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- App Card 3: Placeholder -->
+              <div class="flex-shrink-0 w-[280px] sm:w-[320px] md:w-[360px]">
+                <div class="rounded-2xl border border-border bg-canvas overflow-hidden hover:shadow-xl hover:border-obsidian/20 transition-all duration-300">
+                  <div class="aspect-[16/10] bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center">
+                    <div class="text-center">
+                      <iconify-icon icon="solar:robot-bold" width="48" class="text-purple-600 mb-2"></iconify-icon>
+                      <p class="text-sm text-purple-700 font-medium">AI Assistant</p>
+                    </div>
+                  </div>
+                  <div class="p-4 bg-white">
+                    <h3 class="font-semibold text-obsidian text-sm mb-1">AI Assistant</h3>
+                    <p class="text-xs text-subtle">Custom chatbot for support</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- App Card 4: Placeholder -->
+              <div class="flex-shrink-0 w-[280px] sm:w-[320px] md:w-[360px]">
+                <div class="rounded-2xl border border-border bg-canvas overflow-hidden hover:shadow-xl hover:border-obsidian/20 transition-all duration-300">
+                  <div class="aspect-[16/10] bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center">
+                    <div class="text-center">
+                      <iconify-icon icon="solar:bag-bold" width="48" class="text-orange-600 mb-2"></iconify-icon>
+                      <p class="text-sm text-orange-700 font-medium">E-commerce Store</p>
+                    </div>
+                  </div>
+                  <div class="p-4 bg-white">
+                    <h3 class="font-semibold text-obsidian text-sm mb-1">E-commerce Store</h3>
+                    <p class="text-xs text-subtle">Online marketplace with payments</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- App Card 5: Placeholder -->
+              <div class="flex-shrink-0 w-[280px] sm:w-[320px] md:w-[360px]">
+                <div class="rounded-2xl border border-border bg-canvas overflow-hidden hover:shadow-xl hover:border-obsidian/20 transition-all duration-300">
+                  <div class="aspect-[16/10] bg-gradient-to-br from-teal-100 to-teal-200 flex items-center justify-center">
+                    <div class="text-center">
+                      <iconify-icon icon="solar:calendar-bold" width="48" class="text-teal-600 mb-2"></iconify-icon>
+                      <p class="text-sm text-teal-700 font-medium">Booking System</p>
+                    </div>
+                  </div>
+                  <div class="p-4 bg-white">
+                    <h3 class="font-semibold text-obsidian text-sm mb-1">Booking System</h3>
+                    <p class="text-xs text-subtle">Appointment scheduling app</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Arrow -->
+            <button
+              id="gallery-next"
+              class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 bg-white border border-border rounded-full flex items-center justify-center shadow-lg hover:shadow-xl hover:border-obsidian/20 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed hidden md:flex"
+            >
+              <iconify-icon icon="solar:arrow-right-linear" width="20" class="text-obsidian"></iconify-icon>
+            </button>
+          </div>
+        </div>
+      </section>
 
       <!-- FAQ Section -->
       <section id="faq" class="py-16 sm:py-24 md:py-32 px-6 md:px-12 bg-canvas">
@@ -4303,6 +4429,32 @@
               marquee.style.animationPlayState = 'running';
             });
           });
+
+        // Gallery scroll navigation
+        const galleryScroll = document.getElementById('gallery-scroll');
+        const galleryPrev = document.getElementById('gallery-prev');
+        const galleryNext = document.getElementById('gallery-next');
+
+        if (galleryScroll && galleryPrev && galleryNext) {
+          const scrollAmount = 380; // Card width + gap
+
+          const updateArrows = () => {
+            const { scrollLeft, scrollWidth, clientWidth } = galleryScroll;
+            galleryPrev.disabled = scrollLeft <= 0;
+            galleryNext.disabled = scrollLeft >= scrollWidth - clientWidth - 10;
+          };
+
+          galleryPrev.addEventListener('click', () => {
+            galleryScroll.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+          });
+
+          galleryNext.addEventListener('click', () => {
+            galleryScroll.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+          });
+
+          galleryScroll.addEventListener('scroll', updateArrows);
+          updateArrows();
+        }
 
         // Feature Accordion: expand on hover
         const featureCards = document.querySelectorAll('.feature-card');

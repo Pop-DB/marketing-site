@@ -4,7 +4,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PopDB | Backend for Vibe Coders</title>
+    <meta name="description" content="PopDB is a complete backend platform with app builder, database, hosting, and auth. Build and deploy real apps — one price, unlimited apps and agents." />
+    <link rel="canonical" href="https://www.popdb.ai/" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PopDB" />
+    <meta property="og:title" content="PopDB | Backend for Vibe Coders" />
+    <meta property="og:description" content="PopDB is a complete backend platform with app builder, database, hosting, and auth. Build and deploy real apps — one price, unlimited apps and agents." />
+    <meta property="og:url" content="https://www.popdb.ai/" />
+    <meta property="og:image" content="https://www.popdb.ai/public/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="PopDB | Backend for Vibe Coders" />
+    <meta name="twitter:description" content="PopDB is a complete backend platform with app builder, database, hosting, and auth. Build and deploy real apps — one price, unlimited apps and agents." />
+    <meta name="twitter:image" content="https://www.popdb.ai/public/og-image.png" />
+
     <link rel="icon" type="image/png" href="/public/favicon.png" />
+    <link rel="manifest" href="/public/manifest.json" />
+    <meta name="theme-color" content="#171717" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -16,8 +38,8 @@
 
     <!-- Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js" defer></script>
 
     <!-- Tailwind Config -->
     <script>
@@ -1149,11 +1171,32 @@
         transform: rotate(180deg);
       }
     </style>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "PopDB",
+        "url": "https://www.popdb.ai",
+        "applicationCategory": "DeveloperApplication",
+        "description": "PopDB is a complete backend platform with app builder, database, hosting, and auth. Build and deploy real apps.",
+        "operatingSystem": "Web",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    </script>
   </head>
 
   <body
     class="relative w-full overflow-x-hidden selection:bg-obsidian selection:text-white"
   >
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-obsidian focus:text-white focus:px-4 focus:py-2 focus:rounded-lg">
+      Skip to main content
+    </a>
+
     <!-- Background Grid -->
     <div class="fixed inset-0 z-0 technical-grid pointer-events-none"></div>
 
@@ -1163,7 +1206,7 @@
             <img src="/public/logo-simple.png" alt="PopDB" class="w-[50px] h-[50px] rounded-xl" />
         </a>
 
-        <nav class="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+        <nav class="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2" aria-label="Main navigation">
             <a href="/" class="font-sans text-xs font-medium text-subtle hover:text-obsidian transition-colors">Home</a>
             <a href="/#pricing" class="font-sans text-xs font-medium text-subtle hover:text-obsidian transition-colors">Pricing</a>
         </nav>
@@ -1178,7 +1221,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="relative z-10 flex flex-col w-full">
+    <main id="main-content" class="relative z-10 flex flex-col w-full">
       <!-- Hero Section -->
       <section
         class="relative flex flex-col items-center justify-center pt-24 sm:pt-28 pb-6 sm:pb-8 px-6 md:px-12"
@@ -1260,7 +1303,7 @@
                       class="rounded-2xl border border-border/50 overflow-hidden w-24 h-24 sm:w-40 sm:h-40 md:w-56 md:h-56 shrink-0"
                     >
                       <img
-                        src="public/Dark backgrounds Carousel/Startbuilding dark background.png"
+                        src="public/start-building-dark.png"
                         alt="Quick Setup Guide"
                         class="w-full h-full object-cover block"
                         width="224"
@@ -1301,7 +1344,7 @@
                       class="rounded-2xl border border-border/50 overflow-hidden w-24 h-24 sm:w-40 sm:h-40 md:w-56 md:h-56 shrink-0"
                     >
                       <img
-                        src="public/Dark backgrounds Carousel/Databases Darkbackground.png"
+                        src="public/databases-dark.png"
                         alt="Private Database"
                         class="w-full h-full object-cover block"
                         width="224"
@@ -1342,7 +1385,7 @@
                       class="rounded-2xl border border-border/50 overflow-hidden w-24 h-24 sm:w-40 sm:h-40 md:w-56 md:h-56 shrink-0"
                     >
                       <img
-                        src="public/Dark backgrounds Carousel/Managed Hosting Dark Background.png"
+                        src="public/managed-hosting-dark.png"
                         alt="Managed Hosting"
                         class="w-full h-full object-cover block"
                         width="224"
@@ -1760,7 +1803,7 @@
               </div>
               <!-- Screenshot -->
               <img
-                src="public/Background Breakpoint image/App Demo Builder photo for break point on website.png"
+                src="public/app-demo-builder.png"
                 alt="PopDB app builder demo showing AI chat, database schema, and managed hosting"
                 class="w-full h-auto block"
                 loading="lazy"
@@ -2071,9 +2114,10 @@
                 >
                   <img
                     id="security-gif-img"
-                    src="public/Black and White Marketing gifs/gandalf-you-shall-not-past.gif"
+                    src="public/gandalf.gif"
                     class="w-full h-full object-cover rounded-lg"
                     alt="Security GIF"
+                    loading="lazy"
                   />
                 </div>
               </div>
@@ -2104,29 +2148,34 @@
                 class="w-[70%] mx-auto aspect-square relative bg-canvas rounded-lg border border-border/50"
               >
                 <img
-                  src="public/Black and White Website photos/The_Great_Wave_off_Kanagawa.jpg"
+                  src="public/great-wave.jpg"
                   class="storage-photo active absolute inset-0 w-full h-full object-contain rounded-lg border border-border shadow-sm"
                   alt="Great Wave"
+                  loading="lazy"
                 />
                 <img
-                  src="public/Black and White Website photos/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg"
+                  src="public/starry-night.jpg"
                   class="storage-photo absolute inset-0 w-full h-full object-contain rounded-lg border border-border shadow-sm"
                   alt="Starry Night"
+                  loading="lazy"
                 />
                 <img
-                  src="public/Black and White Website photos/Adams_The_Tetons_and_the_Snake_River.jpg"
+                  src="public/tetons.jpg"
                   class="storage-photo absolute inset-0 w-full h-full object-contain rounded-lg border border-border shadow-sm"
                   alt="Tetons"
+                  loading="lazy"
                 />
                 <img
-                  src="public/Black and White Website photos/Screenshot_2026-02-07_at_12.00.31_AM.png"
+                  src="public/screenshot-1.png"
                   class="storage-photo absolute inset-0 w-full h-full object-contain rounded-lg border border-border shadow-sm"
                   alt="Screenshot 1"
+                  loading="lazy"
                 />
                 <img
-                  src="public/Black and White Website photos/Screenshot_2026-02-07_at_12.04.46_AM.png"
+                  src="public/screenshot-2.png"
                   class="storage-photo absolute inset-0 w-full h-full object-contain rounded-lg border border-border shadow-sm"
                   alt="Screenshot 2"
+                  loading="lazy"
                 />
               </div>
             </div>
@@ -3169,7 +3218,7 @@
             >
               <!-- FAQ Item 1 -->
               <div
-                class="faq-item bg-canvas rounded-xl p-3.5 sm:p-5 cursor-pointer transition-all"
+                class="faq-item bg-canvas rounded-xl p-3.5 sm:p-5 cursor-pointer transition-all" role="button" tabindex="0" aria-expanded="false"
               >
                 <div class="flex items-center justify-between gap-2 sm:gap-4">
                   <h3 class="text-base font-medium text-obsidian">
@@ -3193,7 +3242,7 @@
 
               <!-- FAQ Item 2 -->
               <div
-                class="faq-item bg-canvas rounded-xl p-3.5 sm:p-5 cursor-pointer transition-all"
+                class="faq-item bg-canvas rounded-xl p-3.5 sm:p-5 cursor-pointer transition-all" role="button" tabindex="0" aria-expanded="false"
               >
                 <div class="flex items-center justify-between gap-2 sm:gap-4">
                   <h3 class="text-base font-medium text-obsidian">
@@ -3216,7 +3265,7 @@
 
               <!-- FAQ Item 3 -->
               <div
-                class="faq-item bg-canvas rounded-xl p-3.5 sm:p-5 cursor-pointer transition-all"
+                class="faq-item bg-canvas rounded-xl p-3.5 sm:p-5 cursor-pointer transition-all" role="button" tabindex="0" aria-expanded="false"
               >
                 <div class="flex items-center justify-between gap-2 sm:gap-4">
                   <h3 class="text-base font-medium text-obsidian">
@@ -3237,7 +3286,7 @@
 
               <!-- FAQ Item 4 -->
               <div
-                class="faq-item bg-canvas rounded-xl p-3.5 sm:p-5 cursor-pointer transition-all"
+                class="faq-item bg-canvas rounded-xl p-3.5 sm:p-5 cursor-pointer transition-all" role="button" tabindex="0" aria-expanded="false"
               >
                 <div class="flex items-center justify-between gap-2 sm:gap-4">
                   <h3 class="text-base font-medium text-obsidian">
@@ -3260,7 +3309,7 @@
 
               <!-- FAQ Item 5 -->
               <div
-                class="faq-item bg-canvas rounded-xl p-3.5 sm:p-5 cursor-pointer transition-all"
+                class="faq-item bg-canvas rounded-xl p-3.5 sm:p-5 cursor-pointer transition-all" role="button" tabindex="0" aria-expanded="false"
               >
                 <div class="flex items-center justify-between gap-2 sm:gap-4">
                   <h3 class="text-base font-medium text-obsidian">
@@ -3283,7 +3332,7 @@
 
               <!-- FAQ Item 6 -->
               <div
-                class="faq-item bg-canvas rounded-xl p-3.5 sm:p-5 cursor-pointer transition-all"
+                class="faq-item bg-canvas rounded-xl p-3.5 sm:p-5 cursor-pointer transition-all" role="button" tabindex="0" aria-expanded="false"
               >
                 <div class="flex items-center justify-between gap-2 sm:gap-4">
                   <h3 class="text-base font-medium text-obsidian">
@@ -4696,11 +4745,11 @@
         const securityVisual = document.getElementById('security-visual');
         if (securityVisual) {
           const securityGifs = [
-            'public/Black and White Marketing gifs/gandalf-you-shall-not-past.gif',
-            'public/Black and White Marketing gifs/ship it jurassic park GIF.gif',
-            'public/Black and White Marketing gifs/I Dont Think So No Way GIF.gif',
-            'public/Black and White Marketing gifs/No Way Bird GIF.gif',
-            'public/Black and White Marketing gifs/National Basketball Association Sport GIF by Milwaukee Bucks.gif',
+            'public/gandalf.gif',
+            'public/ship-it-jurassic-park.gif',
+            'public/i-dont-think-so.gif',
+            'public/no-way-bird.gif',
+            'public/milwaukee-bucks.gif',
           ];
           let gifIndex = 0;
           const gifImg = document.getElementById('security-gif-img');
@@ -4754,10 +4803,20 @@
       document.querySelectorAll('.faq-item').forEach((item) => {
         item.addEventListener('click', () => {
           const isOpen = item.classList.contains('faq-open');
-          document
-            .querySelectorAll('.faq-item')
-            .forEach((i) => i.classList.remove('faq-open'));
-          if (!isOpen) item.classList.add('faq-open');
+          document.querySelectorAll('.faq-item').forEach((i) => {
+            i.classList.remove('faq-open');
+            i.setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            item.classList.add('faq-open');
+            item.setAttribute('aria-expanded', 'true');
+          }
+        });
+        item.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            item.click();
+          }
         });
       });
     </script>

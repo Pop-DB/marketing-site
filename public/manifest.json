@@ -1,0 +1,16 @@
+{
+  "name": "PopDB",
+  "short_name": "PopDB",
+  "description": "Backend for Vibe Coders",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#FAFAFA",
+  "theme_color": "#171717",
+  "icons": [
+    {
+      "src": "/public/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

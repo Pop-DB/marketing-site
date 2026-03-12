@@ -1177,6 +1177,14 @@
       .faq-item.faq-open .faq-chevron {
         transform: rotate(180deg);
       }
+
+      /* ===== Typewriter Effect ===== */
+      .typewriter-cursor {
+        animation: blink 1s step-end infinite;
+      }
+      @keyframes blink {
+        50% { opacity: 0; }
+      }
     </style>
 
     <script type="application/ld+json">
@@ -1236,8 +1244,8 @@
           <h1
             class="reveal reveal-delay-1 font-sans text-3xl sm:text-5xl md:text-7xl font-semibold tracking-tighter text-obsidian leading-[1.05]"
           >
-            Your playground to create<br />
-            <span class="text-subtle">apps and agents.</span>
+            Make building <span id="typewriter" class="text-subtle"></span><span class="typewriter-cursor text-subtle">|</span><br />
+            fun again.
           </h1>
 
           <!-- Subtext -->
@@ -4951,6 +4959,55 @@
           }
         });
       });
+
+      // Typewriter Effect
+      (function() {
+        const words = [
+          'apps',
+          'agents',
+          'websites',
+          'dashboards',
+          'demos',
+          'automations',
+          'games',
+          'prototypes',
+          'internal tools',
+          'side projects'
+        ];
+        const typewriterEl = document.getElementById('typewriter');
+        if (!typewriterEl) return;
+
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function type() {
+          const currentWord = words[wordIndex];
+
+          if (isDeleting) {
+            typewriterEl.textContent = currentWord.substring(0, charIndex - 1);
+            charIndex--;
+          } else {
+            typewriterEl.textContent = currentWord.substring(0, charIndex + 1);
+            charIndex++;
+          }
+
+          let delay = isDeleting ? 50 : 100;
+
+          if (!isDeleting && charIndex === currentWord.length) {
+            delay = 2000; // Pause at end of word
+            isDeleting = true;
+          } else if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            wordIndex = (wordIndex + 1) % words.length;
+            delay = 500; // Pause before typing next word
+          }
+
+          setTimeout(type, delay);
+        }
+
+        type();
+      })();
     </script>
 
     <div class="bottom-blur"></div>

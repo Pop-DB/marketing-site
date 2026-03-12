@@ -5085,6 +5085,12 @@
           }
         });
 
+        // PopDB API configuration
+        const POPDB_APP_ID = 'f684821e-9587-42f8-be0b-65202e0ea858';
+        const POPDB_API_BASE = 'https://bryoki.apps.popdb.ai/api/admin/apps/' + POPDB_APP_ID;
+        const POPDB_EVENTS_API = 'https://bryoki.apps.popdb.ai/api/events';
+        const POPDB_EVENTS_KEY = 'evt_b4d4a34b305f3bc2805f897df127a69c49a7f9b5592da418ac3d8ceb7d31661f';
+
         // Form submission
         modalForm.addEventListener('submit', async (e) => {
           e.preventDefault();
@@ -5102,8 +5108,44 @@
               window.plausible('Request Access', { props: { app: currentAppName, email: email } });
             }
 
-            // Simulate brief delay for UX
-            await new Promise(resolve => setTimeout(resolve, 800));
+            // Save to PopDB leads table
+            const leadResponse = await fetch(POPDB_API_BASE + '/rest/leads', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'x-popdb-environment': 'staging',
+                'Prefer': 'return=representation'
+              },
+              body: JSON.stringify({
+                email: email,
+                source: 'gallery',
+                app_name: currentAppName,
+                status: 'new'
+              })
+            });
+
+            let leadId = null;
+            if (leadResponse.ok) {
+              const [lead] = await leadResponse.json();
+              leadId = lead?.id;
+            }
+
+            // Trigger event for email notification
+            await fetch(POPDB_EVENTS_API, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-API-Key': POPDB_EVENTS_KEY
+              },
+              body: JSON.stringify({
+                event_type: 'gallery.access_requested',
+                payload: {
+                  email: email,
+                  app_name: currentAppName,
+                  lead_id: leadId
+                }
+              })
+            });
 
             // Show success state
             modalAppInfo.classList.add('hidden');
